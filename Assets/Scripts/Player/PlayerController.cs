@@ -8,9 +8,9 @@ using Photon.Voice.Unity;
 
 public class PlayerController : MonoBehaviour
 {
-    private Recorder recorder;
-    private InputDevice leftHand;
+    [SerializeField] private Transform spawnPoints;
 
+    private Recorder recorder;
     [HideInInspector] public float speakerAmp;
 
     // Start is called before the first frame update
@@ -18,16 +18,12 @@ public class PlayerController : MonoBehaviour
     {
         recorder = FindObjectOfType<Recorder>();
         recorder.TransmitEnabled= false;
-
-        if(recorder.IsCurrentlyTransmitting)
-
-        leftHand = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(leftHand!= null)
+        if(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
         {
             bool triggerValue;
             if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out triggerValue) && triggerValue)

@@ -5,6 +5,7 @@ using Photon.Pun;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR;
 using UnityEngine.Video;
+using TMPro;
 
 public class NetworkPlayer : MonoBehaviour
 {
@@ -13,8 +14,12 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField] private Transform leftHand;
     [SerializeField] private Transform rightHand;
 
+    [Header("NETWORK PLAYER CANVAS")]
+    [SerializeField] private GameObject playerCanvas;
+    [SerializeField] private TextMeshProUGUI playerNameText;
+
     [Header("ANIMATORS")]
-    [SerializeField] private Animator headAvatarAnimator;
+    [SerializeField] private Animator playerCanvasAnim;
     [SerializeField] private Animator leftHandAnimator;
     [SerializeField] private Animator rightHandAnimator;
 
@@ -25,6 +30,7 @@ public class NetworkPlayer : MonoBehaviour
     private Transform rightHandOrigin;
 
     private PlayerController playerController;
+    private NetworkManager networkManager;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +42,8 @@ public class NetworkPlayer : MonoBehaviour
         rightHandOrigin = rig.transform.Find("Camera Offset/RightHand Controller");
 
         playerController = FindObjectOfType<PlayerController>();
+        networkManager = FindObjectOfType<NetworkManager>();
+
 
         //Disable self-renderers
         if (photonView.IsMine)
@@ -44,7 +52,10 @@ public class NetworkPlayer : MonoBehaviour
             {
                 item.enabled = false;
             }
+            playerCanvas.SetActive(false);
         }
+
+        
     }
 
     // Update is called once per frame
@@ -56,10 +67,11 @@ public class NetworkPlayer : MonoBehaviour
             MapPosition(leftHand, leftHandOrigin);
             MapPosition(rightHand, rightHandOrigin);
 
-            UpdateHeadAnimation();
+            UpdateCanvasAnimation();
             UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), leftHandAnimator);
             UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), rightHandAnimator);
         }
+        playerNameText.text = photonView.Controller.NickName;
     }
 
     void UpdateHandAnimation(InputDevice targetDevice, Animator handAnimator)
@@ -83,9 +95,9 @@ public class NetworkPlayer : MonoBehaviour
         }
     }
 
-    public void UpdateHeadAnimation()
+    public void UpdateCanvasAnimation()
     {
-        headAvatarAnimator.SetFloat("Speaking", playerController.speakerAmp);
+        playerCanvasAnim.SetFloat("Speaking", playerController.speakerAmp);
     }
 
     private void MapPosition(Transform target, Transform rigTransform)
