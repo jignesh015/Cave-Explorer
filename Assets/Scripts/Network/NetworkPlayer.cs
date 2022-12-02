@@ -13,7 +13,8 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField] private Transform leftHand;
     [SerializeField] private Transform rightHand;
 
-    [Header("HAND ANIMATORS")]
+    [Header("ANIMATORS")]
+    [SerializeField] private Animator headAvatarAnimator;
     [SerializeField] private Animator leftHandAnimator;
     [SerializeField] private Animator rightHandAnimator;
 
@@ -22,6 +23,8 @@ public class NetworkPlayer : MonoBehaviour
     private Transform headOrigin;
     private Transform leftHandOrigin;
     private Transform rightHandOrigin;
+
+    private PlayerController playerController;
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +35,10 @@ public class NetworkPlayer : MonoBehaviour
         leftHandOrigin = rig.transform.Find("Camera Offset/LeftHand Controller");
         rightHandOrigin = rig.transform.Find("Camera Offset/RightHand Controller");
 
+        playerController = FindObjectOfType<PlayerController>();
+
         //Disable self-renderers
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
             foreach (var item in GetComponentsInChildren<Renderer>())
             {
@@ -51,6 +56,7 @@ public class NetworkPlayer : MonoBehaviour
             MapPosition(leftHand, leftHandOrigin);
             MapPosition(rightHand, rightHandOrigin);
 
+            UpdateHeadAnimation();
             UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), leftHandAnimator);
             UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), rightHandAnimator);
         }
@@ -75,6 +81,11 @@ public class NetworkPlayer : MonoBehaviour
         {
             handAnimator.SetFloat("Grip", 0);
         }
+    }
+
+    public void UpdateHeadAnimation()
+    {
+        headAvatarAnimator.SetFloat("Speaking", playerController.speakerAmp);
     }
 
     private void MapPosition(Transform target, Transform rigTransform)
