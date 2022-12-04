@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanvasFollowCamera : MonoBehaviour
+namespace CaveExplorer
 {
-    private Transform mainCameraTransform;
-
-    // Start is called before the first frame update
-    void Start()
+    public class CanvasFollowCamera : MonoBehaviour
     {
-        mainCameraTransform = Camera.main.transform;
-    }
+        private Transform mainCameraTransform;
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.forward = mainCameraTransform.forward;
+        // Start is called before the first frame update
+        void Start()
+        {
+            mainCameraTransform = Camera.main.transform;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            transform.forward = mainCameraTransform.forward;
+        }
     }
 }
+

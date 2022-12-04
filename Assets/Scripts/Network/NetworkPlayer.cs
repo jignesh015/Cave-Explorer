@@ -7,102 +7,106 @@ using UnityEngine.XR;
 using UnityEngine.Video;
 using TMPro;
 
-public class NetworkPlayer : MonoBehaviour
+namespace CaveExplorer
 {
-    [Header("NETWORK PLAYER REFERENCES")]
-    [SerializeField] private Transform head;
-    [SerializeField] private Transform leftHand;
-    [SerializeField] private Transform rightHand;
-
-    [Header("NETWORK PLAYER CANVAS")]
-    [SerializeField] private GameObject playerCanvas;
-    [SerializeField] private TextMeshProUGUI playerNameText;
-
-    [Header("ANIMATORS")]
-    [SerializeField] private Animator playerCanvasAnim;
-    [SerializeField] private Animator leftHandAnimator;
-    [SerializeField] private Animator rightHandAnimator;
-
-    private PhotonView photonView;
-
-    private Transform headOrigin;
-    private Transform leftHandOrigin;
-    private Transform rightHandOrigin;
-
-    private PlayerController playerController;
-    private NetworkManager networkManager;
-
-    // Start is called before the first frame update
-    void Start()
+    public class NetworkPlayer : MonoBehaviour
     {
-        photonView= GetComponent<PhotonView>();
-        XROrigin rig = FindObjectOfType<XROrigin>();
-        headOrigin = rig.transform.Find("Camera Offset/Main Camera");
-        leftHandOrigin = rig.transform.Find("Camera Offset/LeftHand Controller");
-        rightHandOrigin = rig.transform.Find("Camera Offset/RightHand Controller");
+        [Header("NETWORK PLAYER REFERENCES")]
+        [SerializeField] private Transform head;
+        [SerializeField] private Transform leftHand;
+        [SerializeField] private Transform rightHand;
 
-        playerController = FindObjectOfType<PlayerController>();
-        networkManager = FindObjectOfType<NetworkManager>();
+        [Header("NETWORK PLAYER CANVAS")]
+        [SerializeField] private GameObject playerCanvas;
+        [SerializeField] private TextMeshProUGUI playerNameText;
 
+        [Header("ANIMATORS")]
+        [SerializeField] private Animator playerCanvasAnim;
+        [SerializeField] private Animator leftHandAnimator;
+        [SerializeField] private Animator rightHandAnimator;
 
-        //Disable self-renderers
-        if (photonView.IsMine)
+        private PhotonView photonView;
+
+        private Transform headOrigin;
+        private Transform leftHandOrigin;
+        private Transform rightHandOrigin;
+
+        private PlayerController playerController;
+        private NetworkManager networkManager;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            foreach (var item in GetComponentsInChildren<Renderer>())
+            photonView = GetComponent<PhotonView>();
+            XROrigin rig = FindObjectOfType<XROrigin>();
+            headOrigin = rig.transform.Find("Camera Offset/Main Camera");
+            leftHandOrigin = rig.transform.Find("Camera Offset/LeftHand Controller");
+            rightHandOrigin = rig.transform.Find("Camera Offset/RightHand Controller");
+
+            playerController = FindObjectOfType<PlayerController>();
+            networkManager = FindObjectOfType<NetworkManager>();
+
+
+            //Disable self-renderers
+            if (photonView.IsMine)
             {
-                item.enabled = false;
+                foreach (var item in GetComponentsInChildren<Renderer>())
+                {
+                    item.enabled = false;
+                }
+                playerCanvas.SetActive(false);
             }
-            playerCanvas.SetActive(false);
+
+
         }
 
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(photonView.IsMine)
+        // Update is called once per frame
+        void Update()
         {
-            MapPosition(head, headOrigin);
-            MapPosition(leftHand, leftHandOrigin);
-            MapPosition(rightHand, rightHandOrigin);
+            if (photonView.IsMine)
+            {
+                MapPosition(head, headOrigin);
+                MapPosition(leftHand, leftHandOrigin);
+                MapPosition(rightHand, rightHandOrigin);
 
-            UpdateCanvasAnimation();
-            UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), leftHandAnimator);
-            UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), rightHandAnimator);
+                UpdateCanvasAnimation();
+                UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand), leftHandAnimator);
+                UpdateHandAnimation(InputDevices.GetDeviceAtXRNode(XRNode.RightHand), rightHandAnimator);
+            }
+            playerNameText.text = photonView.Controller.NickName;
         }
-        playerNameText.text = photonView.Controller.NickName;
-    }
 
-    void UpdateHandAnimation(InputDevice targetDevice, Animator handAnimator)
-    {
-        if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue))
+        void UpdateHandAnimation(InputDevice targetDevice, Animator handAnimator)
         {
-            handAnimator.SetFloat("Trigger", triggerValue);
-        }
-        else
-        {
-            handAnimator.SetFloat("Trigger", 0);
+            if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue))
+            {
+                handAnimator.SetFloat("Trigger", triggerValue);
+            }
+            else
+            {
+                handAnimator.SetFloat("Trigger", 0);
+            }
+
+            if (targetDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue))
+            {
+                handAnimator.SetFloat("Grip", gripValue);
+            }
+            else
+            {
+                handAnimator.SetFloat("Grip", 0);
+            }
         }
 
-        if (targetDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue))
+        public void UpdateCanvasAnimation()
         {
-            handAnimator.SetFloat("Grip", gripValue);
+            playerCanvasAnim.SetFloat("Speaking", playerController.speakerAmp);
         }
-        else
+
+        private void MapPosition(Transform target, Transform rigTransform)
         {
-            handAnimator.SetFloat("Grip", 0);
+            target.position = rigTransform.position;
+            target.rotation = rigTransform.rotation;
         }
-    }
-
-    public void UpdateCanvasAnimation()
-    {
-        playerCanvasAnim.SetFloat("Speaking", playerController.speakerAmp);
-    }
-
-    private void MapPosition(Transform target, Transform rigTransform)
-    {
-        target.position = rigTransform.position;
-        target.rotation = rigTransform.rotation;
     }
 }
+

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class NetworkPlayerSpawner : MonoBehaviourPunCallbacks
+namespace CaveExplorer
 {
-    private GameObject spawnedPlayer;
-
-    public override void OnJoinedRoom()
+    public class NetworkPlayerSpawner : MonoBehaviourPunCallbacks
     {
-        base.OnJoinedRoom();
-        spawnedPlayer = PhotonNetwork.Instantiate("Network Player", transform.position, transform.rotation);
-    }
+        private GameObject spawnedPlayer;
 
-    public override void OnLeftRoom()
-    {
-        base.OnLeftRoom();
-        PhotonNetwork.Destroy(spawnedPlayer);
+        public override void OnJoinedRoom()
+        {
+            base.OnJoinedRoom();
+            spawnedPlayer = PhotonNetwork.Instantiate("Network Player", transform.position, transform.rotation);
+        }
+
+        public override void OnLeftRoom()
+        {
+            base.OnLeftRoom();
+            PhotonNetwork.Destroy(spawnedPlayer);
+        }
     }
 }

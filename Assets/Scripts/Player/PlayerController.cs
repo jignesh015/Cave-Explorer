@@ -6,63 +6,94 @@ using Photon.Pun;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 
-public class PlayerController : MonoBehaviour
+namespace CaveExplorer
 {
-    [SerializeField] private Transform spawnPoints;
-
-    private Recorder recorder;
-    [HideInInspector] public float speakerAmp;
-
-    // Start is called before the first frame update
-    void Start()
+    public class PlayerController : MonoBehaviour
     {
-        recorder = FindObjectOfType<Recorder>();
-        recorder.TransmitEnabled= false;
-    }
+        [SerializeField] private GameObject headMountedLight;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
+        private Recorder recorder;
+        [HideInInspector] public float speakerAmp;
+
+        public bool isPlayerGuide { get; set; }
+
+        // Start is called before the first frame update
+        void Start()
         {
-            bool triggerValue;
-            if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out triggerValue) && triggerValue)
-            {
-                EnableVoiceChat();
-            }
-            else
-            {
-                DisableVoiceChat();
-            }
+            recorder = FindObjectOfType<Recorder>();
+            recorder.TransmitEnabled = false;
 
-            if (recorder.IsCurrentlyTransmitting)
+            ToggleHeadMountedLight(false);
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
             {
-                speakerAmp = recorder.LevelMeter.CurrentPeakAmp * 1000f;
-                if(speakerAmp > 0.1f)
+                bool triggerValue;
+                if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out triggerValue) && triggerValue)
                 {
-                    Debug.LogFormat("<color=green>IsCurrentlyTransmitting {0}</color>", speakerAmp.ToString("F3"));
+                    EnableVoiceChat();
+                }
+                else
+                {
+                    DisableVoiceChat();
+                }
+
+                if (recorder.IsCurrentlyTransmitting)
+                {
+                    speakerAmp = recorder.LevelMeter.CurrentPeakAmp * 1000f;
+                    if (speakerAmp > 0.1f)
+                    {
+                        Debug.LogFormat("<color=green>IsCurrentlyTransmitting {0}</color>", speakerAmp.ToString("F3"));
+                    }
+                }
+                else
+                {
+                    speakerAmp = 0;
                 }
             }
-            else
+        }
+
+        public void EnableVoiceChat()
+        {
+            if (recorder != null && !recorder.TransmitEnabled)
             {
-                speakerAmp = 0;
+                recorder.TransmitEnabled = true;
             }
         }
-    }
 
-    public void EnableVoiceChat()
-    {
-        if(recorder != null && !recorder.TransmitEnabled)
+        public void DisableVoiceChat()
         {
-            recorder.TransmitEnabled = true;
+            if (recorder != null && recorder.TransmitEnabled)
+            {
+                recorder.TransmitEnabled = false;
+            }
         }
-    }
 
-    public void DisableVoiceChat()
-    {
-        if (recorder != null && recorder.TransmitEnabled)
+        public void SetPlayerVariables()
         {
-            recorder.TransmitEnabled = false;
+            if(isPlayerGuide)
+            {
+                //If Player is a Guide
+            }
+            else
+            {
+                //If Player is an Explorer
+                ToggleHeadMountedLight(true);
+            }
+        }
+
+        public void ToggleHeadMountedLight(bool state)
+        {
+            headMountedLight.SetActive(state);
+        }
+
+        public void SetPlayerPos(Transform _posTransform)
+        {
+            transform.position = _posTransform.position;
         }
     }
 }
+
