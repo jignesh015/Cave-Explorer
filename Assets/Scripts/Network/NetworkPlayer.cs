@@ -54,10 +54,8 @@ namespace CaveExplorer
                 {
                     item.enabled = false;
                 }
-                playerCanvas.SetActive(false);
+                playerCanvas.transform.localScale= Vector3.zero;
             }
-
-
         }
 
         // Update is called once per frame
