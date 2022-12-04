@@ -38,18 +38,24 @@ namespace CaveExplorer
 
         private IEnumerator LoadEnvironmentAsync(Environment _env, UnityAction _callback = null)
         {
+            //Load Environment from Resource
             ResourceRequest _req = Resources.LoadAsync<GameObject>(envNamePrefix +_env.name);
             while(!_req.isDone)
             {
                 yield return null;
             }
             GameObject _environmentReqObj = _req.asset as GameObject;
-            GameObject _environmentObj = Instantiate(_environmentReqObj);
-            Debug.LogFormat("<color=cyan>Env Loaded {0}</color>", _environmentObj.name);
+
+            //Instantiate and position environment
+            GameObject _environmentObj = Instantiate(_environmentReqObj, transform);
             _environmentObj.name= _env.name;
             _environmentObj.transform.position = _env.environmentSpawnPos;
             _environmentObj.transform.rotation = _env.environmentSpawnRot;
 
+            //Adjust fog density for the new environment
+            RenderSettings.fogDensity = _env.fogDensity;
+
+            //Invoke callback once environment is done loading
             _callback?.Invoke();
         }
 
@@ -77,5 +83,6 @@ namespace CaveExplorer
         public Quaternion environmentSpawnRot;
         public Vector3 playerSpawnPos;
         public Quaternion playerSpawnRot;
+        public float fogDensity;
     }
 }

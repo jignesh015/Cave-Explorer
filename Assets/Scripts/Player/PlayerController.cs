@@ -90,9 +90,9 @@ namespace CaveExplorer
             headMountedLight.SetActive(state);
         }
 
-        public void SetPlayerPos(Transform _posTransform)
+        public void SetPlayerPos(Vector3 _position)
         {
-            transform.position = _posTransform.position;
+            transform.position = _position;
         }
     }
 }

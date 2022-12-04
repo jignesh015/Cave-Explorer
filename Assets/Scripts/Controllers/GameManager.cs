@@ -63,7 +63,8 @@ namespace CaveExplorer
         public void InitializePlayer(bool _isPlayer1)
         {
             isPlayer1 = _isPlayer1;
-            playerController.SetPlayerPos(isPlayer1 ? player1SpawnPoint: player2SpawnPoint);
+            playerController.SetPlayerPos(isPlayer1 ? 
+                player1SpawnPoint.position : player2SpawnPoint.position);
         }
 
         public void StartGame()
@@ -86,10 +87,10 @@ namespace CaveExplorer
                 //Set Local player to be an explorer
                 playerController.isPlayerGuide = false;
             }
-            envController.LoadEnvironment(envController.caveEnvList[0], OnNewEnvLoaded);
+            envController.LoadEnvironment(_envToLoad, OnNewEnvLoaded);
 
-            //TODO: PLACE PLAYERS IN THEIR STARTING POSITION
-
+            //TODO: PLACE PLAYER IN THEIR STARTING POSITION
+            playerController.SetPlayerPos(_envToLoad.playerSpawnPos);
         }
 
         public void OnNewEnvLoaded()
