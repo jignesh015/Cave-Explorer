@@ -1710,7 +1710,7 @@ MonoBehaviour:
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     playerSpawnPos: {x: 0, y: 0, z: 0}
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.02
+    fogDensity: 0.04
 --- !u!4 &988204739
 Transform:
   m_ObjectHideFlags: 0
