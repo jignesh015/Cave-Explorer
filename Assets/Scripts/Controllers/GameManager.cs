@@ -9,7 +9,6 @@ namespace CaveExplorer
     public class GameManager : MonoBehaviour
     {
         [HideInInspector] public bool isPlayer1;
-        [HideInInspector] public bool player1IsGuide;
 
         [Header("PLAYER SPAWN POINTS")]
         [SerializeField] private Transform player1SpawnPoint;
@@ -22,7 +21,7 @@ namespace CaveExplorer
         public UnityEvent OnPlayerLeftRoom;
 
         [Header("UI EVENTS")]
-        public UnityEvent OnLobbyConfirm;
+        public UnityEvent OnLobbyStartPressed;
 
         [Header("SCRIPT REFERENCES")]
         [HideInInspector] public EnvironmentController envController;
@@ -51,7 +50,7 @@ namespace CaveExplorer
             playerController = FindObjectOfType<PlayerController>();
 
             //Add delegate
-            OnLobbyConfirm.AddListener(StartGame);
+            OnLobbyStartPressed.AddListener(StartGame);
         }
 
         // Update is called once per frame
@@ -69,27 +68,12 @@ namespace CaveExplorer
 
         public void StartGame()
         {
-            //TODO: INSTANTIATE CONTROL ROOM OR CAVE ENVIRONMENT
-            Environment _envToLoad = envController.controlRoomEnv;
-
-            if((isPlayer1 && player1IsGuide) || (!isPlayer1 && !player1IsGuide))
-            {
-                //Load control room environment
-
-                //Set Local player to be a guide
-                playerController.isPlayerGuide = true;
-            }
-            else if((isPlayer1 && !player1IsGuide) || (!isPlayer1 && player1IsGuide))
-            {
-                //Load cave environment
-                _envToLoad = envController.caveEnvList[0];
-
-                //Set Local player to be an explorer
-                playerController.isPlayerGuide = false;
-            }
+            //Load cave environment for respective player
+            Environment _envToLoad = isPlayer1 ? envController.player1CaveEnvList[0]
+                : envController.player2CaveEnvList[0];
             envController.LoadEnvironment(_envToLoad, OnNewEnvLoaded);
 
-            //TODO: PLACE PLAYER IN THEIR STARTING POSITION
+            //Place player in their starting position
             playerController.SetPlayerPos(_envToLoad.playerSpawnPos);
         }
 

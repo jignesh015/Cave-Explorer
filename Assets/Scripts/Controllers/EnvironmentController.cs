@@ -11,8 +11,8 @@ namespace CaveExplorer
         [Header("ENVIRONMENTS")]
         [SerializeField] private string envNamePrefix;
         public Environment lobbyEnv;
-        public Environment controlRoomEnv;
-        public List<Environment> caveEnvList;
+        public List<Environment> player1CaveEnvList;
+        public List<Environment> player2CaveEnvList;
 
         // Start is called before the first frame update
         void Start()

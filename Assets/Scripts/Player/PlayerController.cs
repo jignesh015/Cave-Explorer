@@ -15,8 +15,6 @@ namespace CaveExplorer
         private Recorder recorder;
         [HideInInspector] public float speakerAmp;
 
-        public bool isPlayerGuide { get; set; }
-
         // Start is called before the first frame update
         void Start()
         {
@@ -74,15 +72,7 @@ namespace CaveExplorer
 
         public void SetPlayerVariables()
         {
-            if(isPlayerGuide)
-            {
-                //If Player is a Guide
-            }
-            else
-            {
-                //If Player is an Explorer
-                ToggleHeadMountedLight(true);
-            }
+            ToggleHeadMountedLight(true);
         }
 
         public void ToggleHeadMountedLight(bool state)

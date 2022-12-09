@@ -42,20 +42,20 @@ namespace CaveExplorer
         public void ConnectedToServer()
         {
             Debug.Log("Lobby Canvas Connected to Server");
-            photonView.RPC(nameof(SetPlayerRoles), RpcTarget.AllBufferedViaServer, gameManager.player1IsGuide);
+            //photonView.RPC(nameof(SetPlayerRoles), RpcTarget.AllBufferedViaServer, gameManager.player1IsGuide);
         }
 
-        public void OnConfirmPressed()
+        public void OnStartPressed()
         {
             Debug.Log("CONFIRM PRESSEED");
-            photonView.RPC(nameof(StartGame), RpcTarget.AllBufferedViaServer, gameManager.player1IsGuide);
+            photonView.RPC(nameof(StartGame), RpcTarget.AllBufferedViaServer);
         }
 
-        public void OnSwapPressed()
-        {
-            gameManager.player1IsGuide = !gameManager.player1IsGuide;
-            photonView.RPC(nameof(SetPlayerRoles), RpcTarget.AllBufferedViaServer, gameManager.player1IsGuide);
-        }
+        //public void OnSwapPressed()
+        //{
+        //    gameManager.player1IsGuide = !gameManager.player1IsGuide;
+        //    photonView.RPC(nameof(SetPlayerRoles), RpcTarget.AllBufferedViaServer, gameManager.player1IsGuide);
+        //}
 
         public void PlaySFX(AudioClip _clip)
         {
@@ -64,27 +64,27 @@ namespace CaveExplorer
             lobbyUIAudio.Play();
         }
 
+        //[PunRPC]
+        //private void SetPlayerRoles(bool _player1IsGuide)
+        //{
+        //    gameManager.player1IsGuide = _player1IsGuide;
+
+        //    //Set Role UI for Player 1
+        //    player1Guide.SetActive(_player1IsGuide);
+        //    player1Explorer.SetActive(!_player1IsGuide);
+
+        //    //Set Role UI for Player 2
+        //    player2Guide.SetActive(!_player1IsGuide);
+        //    player2Explorer.SetActive(_player1IsGuide);
+
+        //    //Play Button Pressed SFX
+        //    PlaySFX(buttonPressedSFX);
+        //}
+
         [PunRPC]
-        private void SetPlayerRoles(bool _player1IsGuide)
+        private void StartGame()
         {
-            gameManager.player1IsGuide = _player1IsGuide;
-
-            //Set Role UI for Player 1
-            player1Guide.SetActive(_player1IsGuide);
-            player1Explorer.SetActive(!_player1IsGuide);
-
-            //Set Role UI for Player 2
-            player2Guide.SetActive(!_player1IsGuide);
-            player2Explorer.SetActive(_player1IsGuide);
-
-            //Play Button Pressed SFX
-            PlaySFX(buttonPressedSFX);
-        }
-
-        [PunRPC]
-        private void StartGame(bool _player1IsGuide)
-        {
-            gameManager.player1IsGuide = _player1IsGuide;
+            //gameManager.player1IsGuide = _player1IsGuide;
 
             //Hide Lobby Canvas
             lobbyCanvas.transform.localScale = Vector3.zero;
@@ -93,7 +93,7 @@ namespace CaveExplorer
             PlaySFX(buttonPressedSFX);
 
             //Invoke Lobby Confirmed delegate
-            gameManager.OnLobbyConfirm?.Invoke();
+            gameManager.OnLobbyStartPressed?.Invoke();
         }
     }
 }

@@ -1577,7 +1577,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer1: 0
-  player1IsGuide: 0
   player1SpawnPoint: {fileID: 22164401}
   player2SpawnPoint: {fileID: 1895398287}
   OnConnectedToServer:
@@ -1592,7 +1591,7 @@ MonoBehaviour:
   OnPlayerLeftRoom:
     m_PersistentCalls:
       m_Calls: []
-  OnLobbyConfirm:
+  OnLobbyStartPressed:
     m_PersistentCalls:
       m_Calls: []
   envController: {fileID: 0}
@@ -2002,20 +2001,8 @@ MonoBehaviour:
     playerSpawnPos: {x: 0, y: 0, z: 0}
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     fogDensity: 0.09
-  controlRoomEnv:
-    name: Control_Room
-    environmentSpawnPos: {x: 0, y: 0, z: 0}
-    environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    playerSpawnPos: {x: 0, y: 0, z: 0}
-    playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.06
-  caveEnvList:
-  - name: Cave_1
-    environmentSpawnPos: {x: 0, y: 0, z: 0}
-    environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    playerSpawnPos: {x: 0, y: 0, z: 0}
-    playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.04
+  player1CaveEnvList: []
+  player2CaveEnvList: []
 --- !u!4 &988204739
 Transform:
   m_ObjectHideFlags: 0

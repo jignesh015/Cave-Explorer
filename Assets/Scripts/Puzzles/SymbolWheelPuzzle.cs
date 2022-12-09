@@ -42,6 +42,9 @@ namespace CaveExplorer
 
         public void IntializePuzzle()
         {
+            if (!GameManager.Instance.isPlayer1)
+                return;
+
             //Reset bools
             completedHalfRotation = false;
             completedFullRotation = false;
@@ -69,8 +72,18 @@ namespace CaveExplorer
                 }
                 _symbolIndexString = _symbolIndexString.Remove(_symbolIndexString.Length - 1, 1);
                 Debug.LogFormat("<color=red>_symbolIndexString {0}</color>", _symbolIndexString);
+
+                //Set index for random initial rotation
+                int _player1RandIndex = Random.Range(0, 4);
+                int _player2RandIndex = Random.Range(0, 4);
+                while (_player1RandIndex == _player2RandIndex)
+                {
+                    _player2RandIndex = Random.Range(0, 4);
+                }
+
                 photonView.RPC(nameof(AssignPuzzlePieceSymbols),
-                    RpcTarget.AllBufferedViaServer, new object[] { i, _symbolIndexString });
+                    RpcTarget.AllBufferedViaServer, 
+                    new object[] { i, _symbolIndexString, _player1RandIndex, _player2RandIndex });
             }
         }
 
@@ -100,6 +113,23 @@ namespace CaveExplorer
         }
 
         /// <summary>
+        /// Returns a string with comma separated values of all puzzle piece symbols
+        /// </summary>
+        /// <returns></returns>
+        private string GetSymbolIndexString()
+        {
+            string _currentSymbolIndexString = string.Empty;
+            foreach (PuzzlePiece _piece in puzzlePieces)
+            {
+                _currentSymbolIndexString += _piece.GetCurrentSymbolIndex() + ",";
+            }
+            _currentSymbolIndexString = _currentSymbolIndexString.Remove(_currentSymbolIndexString.Length - 1, 1);
+            Debug.LogFormat("<color=cyan>_currentSymbolIndexString : {0}</color>", _currentSymbolIndexString);
+
+            return _currentSymbolIndexString;
+        }
+
+        /// <summary>
         /// Is called when the wheel makes a complete rotation
         /// </summary>
         private void OnWheelRotationComplete()
@@ -111,14 +141,17 @@ namespace CaveExplorer
             completedHalfRotation = false;
             completedFullRotation = false;
 
-            //TODO: CHANGE PUZZLE PIECE ROTATION
+            //Rotate puzzle piece
             if(currentWheel!= null)
             {
                 PuzzlePiece _puzzlePiece = currentWheel.GetComponent<SteeringWheel>().correspondingPuzzlePiece;
                 _puzzlePiece.RotatePiece();
             }
 
-            Debug.LogFormat("<color=cyan>OnWheelRotationComplete : {0}</color>", wheelRotationCount);
+            //Check if puzzle solved
+            string _symbolString = GetSymbolIndexString();
+            photonView.RPC(nameof(CheckIfPuzzleSolved), RpcTarget.AllBufferedViaServer,
+                new object[] { GameManager.Instance.isPlayer1, _symbolString });
         }
 
         /// <summary>
@@ -166,7 +199,7 @@ namespace CaveExplorer
         /// A PUN RPC for assigning symbols to each puzzle piece
         /// </summary>
         [PunRPC]
-        public void AssignPuzzlePieceSymbols(int _pieceIndex, string _symbolIndexString)
+        public void AssignPuzzlePieceSymbols(int _pieceIndex, string _symbolIndexString, int _player1RotIndex, int _player2RotIndex)
         {
             //Convert from string to index list
             List<string> _symbolIndex = _symbolIndexString.Split(',').ToList();
@@ -179,8 +212,26 @@ namespace CaveExplorer
             //Assign given symbol list to puzzle piece
             puzzlePieces[_pieceIndex].SetSymbolMaterials(_symbolsToAssign);
 
-            //Assign random initial rotation
-            puzzlePieces[_pieceIndex].SetInitialRotation();
+            //Assign initial rotation
+            puzzlePieces[_pieceIndex].SetInitialRotation(GameManager.Instance.isPlayer1 ? _player1RotIndex : _player2RotIndex);
+        }
+
+        /// <summary>
+        ///  A PUN RPC for comparing the symbol index for all the players
+        ///  and checking if the puzzle is solved
+        /// </summary>
+        [PunRPC]
+        public void CheckIfPuzzleSolved(bool _isPlayer1, string _symbolIndexString)
+        {
+            if(GameManager.Instance.isPlayer1 != _isPlayer1)
+            {
+                if (_symbolIndexString.Equals(GetSymbolIndexString()))
+                {
+                    //Puzzle is solved
+                    Debug.LogFormat("<color=green>PUZZLE IS SOLVED</color>");
+                }
+            }
+
         }
     }
 }

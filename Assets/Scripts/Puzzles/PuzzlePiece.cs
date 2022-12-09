@@ -41,21 +41,6 @@ namespace CaveExplorer
             currentRotation = pieceToRotate.localRotation;
         }
 
-        private IEnumerator MovePiece(Vector3 _startPos, Vector3 _endPos, float _lerpTime, bool _isPushed)
-        {
-            isRotating = true;
-            float startTime = Time.time;
-
-            while (Time.time < startTime + _lerpTime)
-            {
-                pieceToRotate.localPosition = Vector3.Lerp(_startPos, _endPos, (Time.time - startTime) / _lerpTime);
-                yield return null;
-            }
-            pieceToRotate.localPosition = _endPos;
-            isRotating = false;
-            StopSFX();
-        }
-
         /// <summary>
         /// Rotates the puzzle piece by 90 degrees
         /// </summary>
@@ -100,9 +85,6 @@ namespace CaveExplorer
             Material[] _matArray = puzzlePieceRenderer.materials;
             for(int i = 0; i < puzzleSymbols.Count; i++)
             {
-                //puzzlePieceRenderer.materials[i + 1] = puzzleSymbols[i].symbolMaterial;
-                //Debug.LogFormat("<color=orange>SetSymbolMaterials {0} | {1}</color>", i + 1,
-                //    puzzleSymbols[i].symbolMaterial.name);
                 _matArray[i + 1] = puzzleSymbols[i].symbolMaterial;
             }
             puzzlePieceRenderer.materials = _matArray;
