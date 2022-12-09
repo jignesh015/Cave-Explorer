@@ -1695,7 +1695,7 @@ MonoBehaviour:
   m_HideControllerOnSelect: 0
   m_AllowHoveredActivate: 0
   m_PlayAudioClipOnSelectEntered: 1
-  m_AudioClipForOnSelectEntered: {fileID: 8300000, guid: 3f59fbc7458dd9e439b308ace1598b0b,
+  m_AudioClipForOnSelectEntered: {fileID: 8300000, guid: 4228c8fe028d39f408d5473bf82a2c91,
     type: 3}
   m_PlayAudioClipOnSelectExited: 0
   m_AudioClipForOnSelectExited: {fileID: 0}
@@ -3257,38 +3257,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 230792919, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261925567, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 261925567, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 261925567, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.07
-      objectReference: {fileID: 0}
-    - target: {fileID: 261925567, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.414
-      objectReference: {fileID: 0}
-    - target: {fileID: 261925569, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ad7ce727a68a61f4897679b81da7b344, type: 2}
-    - target: {fileID: 1429520637, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1859176993, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2452076912383599651, guid: 72edb2ca106e0fc42b26957f5a69aa32,
         type: 3}
       propertyPath: m_RootOrder
@@ -3344,20 +3312,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4363400918019774027, guid: 72edb2ca106e0fc42b26957f5a69aa32,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4544434410886294216, guid: 72edb2ca106e0fc42b26957f5a69aa32,
         type: 3}
       propertyPath: m_Name
       value: Puzzle_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7705542474063279040, guid: 72edb2ca106e0fc42b26957f5a69aa32,
-        type: 3}
-      propertyPath: m_ThrowOnDetach
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7705542474063279040, guid: 72edb2ca106e0fc42b26957f5a69aa32,
-        type: 3}
-      propertyPath: m_Colliders.Array.size
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72edb2ca106e0fc42b26957f5a69aa32, type: 3}

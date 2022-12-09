@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CaveExplorer
 {
     [Serializable]
-    public class SymbolPuzzle
+    public class PuzzleSymbol
     {
         public int symbolIndex;
         public Material symbolMaterial;

@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,10 @@ namespace CaveExplorer
     public class SymbolWheelPuzzle : Puzzle
     {
         [Header("SYMBOL LIST")]
-        [SerializeField] private List<SymbolPuzzle> symbols;
+        [SerializeField] private List<PuzzleSymbol> symbols;
+
+        [Header("PUZZLE PIECE")]
+        [SerializeField] private List<PuzzlePiece> puzzlePieces;
 
         [Header("STEERING WHEELS")]
         [SerializeField] private Transform currentWheel;
@@ -20,10 +25,53 @@ namespace CaveExplorer
 
         private bool completedHalfRotation;
         private bool completedFullRotation;
+
+        private PhotonView photonView;
         // Start is called before the first frame update
         void Start()
         {
-            
+            photonView = PhotonView.Get(this);
+
+            GameManager.Instance.OnJoinedRoom.AddListener(IntializePuzzle);
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnJoinedRoom.RemoveListener(IntializePuzzle);
+        }
+
+        public void IntializePuzzle()
+        {
+            //Reset bools
+            completedHalfRotation = false;
+            completedFullRotation = false;
+
+            //Generate random list of symbol index
+            List<int> _symbolIndexList = new List<int>();
+            for(int i = 0; i < symbols.Count; i++)
+            {
+                int _rand = Random.Range(0, symbols.Count);
+                while(_symbolIndexList.Contains(_rand))
+                {
+                    _rand = Random.Range(0, symbols.Count);
+                }
+                _symbolIndexList.Add(_rand);
+            }
+
+            //Assign 4 symbols to each piece
+            for(int i = 0; i < puzzlePieces.Count; i++)
+            {
+                //Convert index list to string to send it over RPC
+                string _symbolIndexString = "";
+                for(int j = 4 * i; j < (4*i) + 4; j++)
+                {
+                    _symbolIndexString += _symbolIndexList[j] + ",";
+                }
+                _symbolIndexString = _symbolIndexString.Remove(_symbolIndexString.Length - 1, 1);
+                Debug.LogFormat("<color=red>_symbolIndexString {0}</color>", _symbolIndexString);
+                photonView.RPC(nameof(AssignPuzzlePieceSymbols),
+                    RpcTarget.AllBufferedViaServer, new object[] { i, _symbolIndexString });
+            }
         }
 
         // Update is called once per frame
@@ -62,6 +110,13 @@ namespace CaveExplorer
             //Reset bool
             completedHalfRotation = false;
             completedFullRotation = false;
+
+            //TODO: CHANGE PUZZLE PIECE ROTATION
+            if(currentWheel!= null)
+            {
+                PuzzlePiece _puzzlePiece = currentWheel.GetComponent<SteeringWheel>().correspondingPuzzlePiece;
+                _puzzlePiece.RotatePiece();
+            }
 
             Debug.LogFormat("<color=cyan>OnWheelRotationComplete : {0}</color>", wheelRotationCount);
         }
@@ -105,6 +160,27 @@ namespace CaveExplorer
             completedHalfRotation = false;
             completedFullRotation = false;
 
+        }
+
+        /// <summary>
+        /// A PUN RPC for assigning symbols to each puzzle piece
+        /// </summary>
+        [PunRPC]
+        public void AssignPuzzlePieceSymbols(int _pieceIndex, string _symbolIndexString)
+        {
+            //Convert from string to index list
+            List<string> _symbolIndex = _symbolIndexString.Split(',').ToList();
+            List<PuzzleSymbol> _symbolsToAssign = new List<PuzzleSymbol>();
+            foreach (string _index in _symbolIndex)
+            {
+                _symbolsToAssign.Add(symbols[int.Parse(_index)]);
+            }
+
+            //Assign given symbol list to puzzle piece
+            puzzlePieces[_pieceIndex].SetSymbolMaterials(_symbolsToAssign);
+
+            //Assign random initial rotation
+            puzzlePieces[_pieceIndex].SetInitialRotation();
         }
     }
 }

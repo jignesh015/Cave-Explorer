@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2335594269656754482}
   - component: {fileID: 5370019809255234942}
   - component: {fileID: 683523786438986789}
+  - component: {fileID: 4611416398344087572}
   m_Layer: 0
   m_Name: Steering Wheel
   m_TagString: Untagged
@@ -203,6 +204,19 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4611416398344087572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129004230246718285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 808d4ed22fb473e45afea7c8740fa908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  correspondingPuzzlePiece: {fileID: 0}
 --- !u!1 &2335594269174211743
 GameObject:
   m_ObjectHideFlags: 0
