@@ -12,7 +12,7 @@ namespace CaveExplorer
     {
         [Header("PLAYER PROPS")]
         [SerializeField] private GameObject headMountedLight;
-        [SerializeField] private GameObject walkieTalkie;
+        [SerializeField] private WalkieTalkieController walkieTalkie;
 
         [Header("PLAYER HANDS")]
         [SerializeField] private HandPresence leftHandPresence;
@@ -74,6 +74,7 @@ namespace CaveExplorer
             if (recorder != null && !recorder.TransmitEnabled)
             {
                 recorder.TransmitEnabled = true;
+                walkieTalkie.ToggleWalkieTalkieLED(true);
             }
         }
 
@@ -85,6 +86,7 @@ namespace CaveExplorer
             if (recorder != null && recorder.TransmitEnabled)
             {
                 recorder.TransmitEnabled = false;
+                walkieTalkie.ToggleWalkieTalkieLED(false);
             }
         }
 
@@ -117,7 +119,7 @@ namespace CaveExplorer
         /// <param name="state"></param>
         public void ToggleWalkieTalkie(bool state)
         {
-            walkieTalkie.SetActive(state);
+            walkieTalkie.gameObject.SetActive(state);
         }
 
         /// <summary>

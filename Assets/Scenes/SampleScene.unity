@@ -1231,7 +1231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headMountedLight: {fileID: 2106988286}
-  walkieTalkie: {fileID: 2112301877}
+  walkieTalkie: {fileID: 2112301879}
   leftHandPresence: {fileID: 1213974545}
   rightHandPresence: {fileID: 1319034157}
   reticle: {fileID: 1961928827}
@@ -2859,8 +2859,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -3390,7 +3390,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.3
   m_Range: 8
   m_SpotAngle: 70
   m_InnerSpotAngle: 50
@@ -3440,12 +3440,18 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &2112301877 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3381597308687531896, guid: 1ad550fcecf841f4d90f06649d80db54,
+--- !u!114 &2112301879 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1091308270861789583, guid: 1ad550fcecf841f4d90f06649d80db54,
     type: 3}
   m_PrefabInstance: {fileID: 1840648841}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13721e04be144fa4e9e7fbdc9f66f2b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6243242723835844806
 PrefabInstance:
   m_ObjectHideFlags: 0
