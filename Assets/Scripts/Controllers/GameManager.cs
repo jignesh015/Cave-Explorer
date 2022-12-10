@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,7 +9,9 @@ namespace CaveExplorer
 {
     public class GameManager : MonoBehaviour
     {
+        [Header("PUBLIC BOOL")]
         [HideInInspector] public bool isPlayer1;
+        [HideInInspector] public bool isConnectedToServer;
 
         [Header("PLAYER SPAWN POINTS")]
         [SerializeField] private Transform player1SpawnPoint;
@@ -26,6 +29,9 @@ namespace CaveExplorer
         [Header("SCRIPT REFERENCES")]
         [HideInInspector] public EnvironmentController envController;
         [HideInInspector] public PlayerController playerController;
+
+        [Header("DEBUG ONLY")]
+        public bool enableSinglePlayerMode;
 
         public static GameManager Instance { get; private set; }
 
@@ -51,6 +57,7 @@ namespace CaveExplorer
 
             //Add delegate
             OnLobbyStartPressed.AddListener(StartGame);
+            OnConnectedToServer.AddListener(ConnectedToServer);
         }
 
         // Update is called once per frame
@@ -59,6 +66,18 @@ namespace CaveExplorer
 
         }
 
+        /// <summary>
+        /// Is triggered when connected to the photon server
+        /// </summary>
+        private void ConnectedToServer()
+        {
+            isConnectedToServer = true;
+        }
+
+        /// <summary>
+        /// Initializes the local player
+        /// </summary>
+        /// <param name="_isPlayer1"></param>
         public void InitializePlayer(bool _isPlayer1)
         {
             isPlayer1 = _isPlayer1;
@@ -66,6 +85,9 @@ namespace CaveExplorer
                 player1SpawnPoint.position : player2SpawnPoint.position);
         }
 
+        /// <summary>
+        /// Starts the game by placing the player in the respective environment
+        /// </summary>
         public void StartGame()
         {
             //Load cave environment for respective player
@@ -75,8 +97,14 @@ namespace CaveExplorer
 
             //Place player in their starting position
             playerController.SetPlayerPos(_envToLoad.playerSpawnPos);
+
+            //Switch off network players
+            ToggleNetworkPlayers(false);
         }
 
+        /// <summary>
+        /// Is called when a new environment is done loading
+        /// </summary>
         public void OnNewEnvLoaded()
         {
             //Remove Lobby Environment
@@ -84,6 +112,19 @@ namespace CaveExplorer
 
             //Set player variables
             playerController.SetPlayerVariables();
+        }
+
+        /// <summary>
+        /// Toggles all the network players on/off
+        /// </summary>
+        /// <param name="_state"></param>
+        public void ToggleNetworkPlayers(bool _state)
+        {
+            List<NetworkPlayer> _networkPlayers = FindObjectsOfType<NetworkPlayer>().ToList();
+            foreach(NetworkPlayer _np in _networkPlayers)
+            {
+                _np.gameObject.SetActive(_state);
+            }
         }
     }
 }

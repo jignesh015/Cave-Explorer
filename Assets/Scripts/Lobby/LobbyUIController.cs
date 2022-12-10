@@ -12,6 +12,8 @@ namespace CaveExplorer
     {
         [Header("CANVAS REFERENCES")]
         [SerializeField] private GameObject lobbyCanvas;
+        [SerializeField] private GameObject waitingToConnectPanel;
+        [SerializeField] private GameObject connectedToServerPanel;
         [SerializeField] private GameObject player1ReadyText;
         [SerializeField] private GameObject player2ReadyText;
         [SerializeField] private Button startButton;
@@ -32,6 +34,10 @@ namespace CaveExplorer
 
             //Add event listeners
             gameManager.OnConnectedToServer.AddListener(ConnectedToServer);
+
+            //Show appropriate UI
+            waitingToConnectPanel.SetActive(!gameManager.isConnectedToServer);
+            connectedToServerPanel.SetActive(gameManager.isConnectedToServer);
         }
 
         private void OnDisable()
@@ -39,10 +45,13 @@ namespace CaveExplorer
             gameManager.OnConnectedToServer.RemoveListener(ConnectedToServer);
         }
 
-        public void ConnectedToServer()
+        /// <summary>
+        /// Is triggered when player gets connected to a server
+        /// </summary>
+        private void ConnectedToServer()
         {
-            Debug.Log("Lobby Canvas Connected to Server");
-            //photonView.RPC(nameof(SetPlayerRoles), RpcTarget.AllBufferedViaServer, gameManager.player1IsGuide);
+            waitingToConnectPanel.SetActive(false);
+            connectedToServerPanel.SetActive(true);
         }
 
         public void OnStartPressed()
@@ -100,7 +109,8 @@ namespace CaveExplorer
             }
 
             //If both player are ready, start the game
-            if(player1ReadyText.activeSelf && player2ReadyText.activeSelf)
+            if((player1ReadyText.activeSelf && player2ReadyText.activeSelf) ||
+                gameManager.enableSinglePlayerMode)
             {
                 //Hide Lobby Canvas
                 lobbyCanvas.transform.localScale = Vector3.zero;
