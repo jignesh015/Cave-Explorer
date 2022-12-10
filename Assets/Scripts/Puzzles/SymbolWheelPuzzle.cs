@@ -1,5 +1,7 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,21 +25,32 @@ namespace CaveExplorer
         [SerializeField] private Quaternion currentWheelRot;
         [SerializeField] private int wheelRotationCount;
 
+        [Header("SFX")]
+        [SerializeField] private AudioClip puzzleSolvedSFX;
+
         private bool completedHalfRotation;
         private bool completedFullRotation;
 
-        private PhotonView photonView;
+        private bool isPuzzleSolved;
+
+        private AudioSource audioSource;
+
         // Start is called before the first frame update
         void Start()
         {
-            photonView = PhotonView.Get(this);
+            audioSource = GetComponent<AudioSource>();
 
-            GameManager.Instance.OnJoinedRoom.AddListener(IntializePuzzle);
+            IntializePuzzle();
+        }
+
+        private void OnEnable()
+        {
+            PhotonNetwork.NetworkingClient.EventReceived += OnCustomEvent;
         }
 
         private void OnDisable()
         {
-            GameManager.Instance.OnJoinedRoom.RemoveListener(IntializePuzzle);
+            PhotonNetwork.NetworkingClient.EventReceived -= OnCustomEvent;
         }
 
         public void IntializePuzzle()
@@ -46,6 +59,7 @@ namespace CaveExplorer
                 return;
 
             //Reset bools
+            isPuzzleSolved = false;
             completedHalfRotation = false;
             completedFullRotation = false;
 
@@ -71,7 +85,7 @@ namespace CaveExplorer
                     _symbolIndexString += _symbolIndexList[j] + ",";
                 }
                 _symbolIndexString = _symbolIndexString.Remove(_symbolIndexString.Length - 1, 1);
-                Debug.LogFormat("<color=red>_symbolIndexString {0}</color>", _symbolIndexString);
+                Debug.LogFormat("<color=olive>_symbolIndexString {0}</color>", _symbolIndexString);
 
                 //Set index for random initial rotation
                 int _player1RandIndex = Random.Range(0, 4);
@@ -81,9 +95,9 @@ namespace CaveExplorer
                     _player2RandIndex = Random.Range(0, 4);
                 }
 
-                photonView.RPC(nameof(AssignPuzzlePieceSymbols),
-                    RpcTarget.AllBufferedViaServer, 
-                    new object[] { i, _symbolIndexString, _player1RandIndex, _player2RandIndex });
+                //Raise Photon Event for assigning puzzle piece symbol
+                RaiseCustomEvent(StaticData.AssignPuzzlePieceSymbolsEventCode,
+                   new object[] { i, _symbolIndexString, _player1RandIndex, _player2RandIndex });
             }
         }
 
@@ -124,8 +138,6 @@ namespace CaveExplorer
                 _currentSymbolIndexString += _piece.GetCurrentSymbolIndex() + ",";
             }
             _currentSymbolIndexString = _currentSymbolIndexString.Remove(_currentSymbolIndexString.Length - 1, 1);
-            Debug.LogFormat("<color=cyan>_currentSymbolIndexString : {0}</color>", _currentSymbolIndexString);
-
             return _currentSymbolIndexString;
         }
 
@@ -148,10 +160,10 @@ namespace CaveExplorer
                 _puzzlePiece.RotatePiece();
             }
 
-            //Check if puzzle solved
+            //Raise photon event for Checking if puzzle solved
             string _symbolString = GetSymbolIndexString();
-            photonView.RPC(nameof(CheckIfPuzzleSolved), RpcTarget.AllBufferedViaServer,
-                new object[] { GameManager.Instance.isPlayer1, _symbolString });
+            RaiseCustomEvent(StaticData.CheckIfPuzzleSolvedEventCode,
+                   new object[] { GameManager.Instance.isPlayer1, _symbolString });
         }
 
         /// <summary>
@@ -160,9 +172,6 @@ namespace CaveExplorer
         /// <param name="args"></param>
         public void OnWheelGrab(SelectEnterEventArgs args)
         {
-            Debug.LogFormat("<color=yellow>interactableObject object rot {0} | {1}</color>", 
-                args.interactableObject.transform.name, args.interactableObject.transform.rotation.ToString("F2"));
-
             currentWheel = args.interactableObject.transform;
             startWheelRot = currentWheel.rotation;
 
@@ -195,12 +204,44 @@ namespace CaveExplorer
 
         }
 
-        /// <summary>
-        /// A PUN RPC for assigning symbols to each puzzle piece
-        /// </summary>
-        [PunRPC]
-        public void AssignPuzzlePieceSymbols(int _pieceIndex, string _symbolIndexString, int _player1RotIndex, int _player2RotIndex)
+        public void PlaySFX(AudioClip _clip)
         {
+            audioSource.Stop();
+            audioSource.clip = _clip;
+            audioSource.Play();
+        }
+
+        /// <summary>
+        /// Raises a custom Photon event using the given parameters
+        /// </summary>
+        public void RaiseCustomEvent(byte _eventCode, object[] _content)
+        {
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; 
+            PhotonNetwork.RaiseEvent(_eventCode, _content, raiseEventOptions, SendOptions.SendReliable);
+        }
+
+        public void OnCustomEvent(EventData photonEvent)
+        {
+            byte eventCode = photonEvent.Code;
+            if (eventCode == StaticData.AssignPuzzlePieceSymbolsEventCode)
+                AssignPuzzlePieceSymbols((object[])photonEvent.CustomData);
+            else if(eventCode == StaticData.CheckIfPuzzleSolvedEventCode)
+                CheckIfPuzzleSolved((object[])photonEvent.CustomData);
+            else if (eventCode == StaticData.PuzzleSolvedEventCode)
+                PuzzleSolved();
+        }
+
+        /// <summary>
+        /// Assigns symbols to each puzzle piece
+        /// </summary>
+        public void AssignPuzzlePieceSymbols(object[] _content)
+        {
+            //Extract data from custom event object
+            int _pieceIndex = (int)_content[0];
+            string _symbolIndexString = (string)_content[1];
+            int _player1RotIndex = (int)_content[2];
+            int _player2RotIndex = (int)_content[3];
+
             //Convert from string to index list
             List<string> _symbolIndex = _symbolIndexString.Split(',').ToList();
             List<PuzzleSymbol> _symbolsToAssign = new List<PuzzleSymbol>();
@@ -217,21 +258,44 @@ namespace CaveExplorer
         }
 
         /// <summary>
-        ///  A PUN RPC for comparing the symbol index for all the players
-        ///  and checking if the puzzle is solved
+        ///  Compares the symbol index for all the players
+        ///  and checks if the puzzle is solved
         /// </summary>
-        [PunRPC]
-        public void CheckIfPuzzleSolved(bool _isPlayer1, string _symbolIndexString)
+        public void CheckIfPuzzleSolved(object[] _content)
         {
-            if(GameManager.Instance.isPlayer1 != _isPlayer1)
+            //Extract data from custom event object
+            bool _isPlayer1 = (bool)_content[0];
+            string _symbolIndexString = (string)(_content[1]);
+
+            if (GameManager.Instance.isPlayer1 != _isPlayer1)
             {
                 if (_symbolIndexString.Equals(GetSymbolIndexString()))
                 {
                     //Puzzle is solved
                     Debug.LogFormat("<color=green>PUZZLE IS SOLVED</color>");
+
+                    //Raise photon event to notify each player
+                    RaiseCustomEvent(StaticData.PuzzleSolvedEventCode, null);
+                }
+                else
+                {
+                    Debug.LogFormat("<color=yellow>PUZZLE NOT SOLVED</color>");
                 }
             }
+        }
 
+        /// <summary>
+        /// Is called when the puzzle is solved
+        /// </summary>
+        public void PuzzleSolved()
+        {
+            if (isPuzzleSolved) return;
+
+            isPuzzleSolved = true;
+            PlaySFX(puzzleSolvedSFX);
+            Destroy(gameObject, 2f);
+
+            //TODO: PUZZLE COMPLETION LOGIC
         }
     }
 }

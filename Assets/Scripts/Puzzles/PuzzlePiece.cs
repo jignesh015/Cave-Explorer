@@ -55,7 +55,7 @@ namespace CaveExplorer
 
             //Increment rotation angle index
             currentRotationAngleIndex++;
-            if (currentRotationAngleIndex > rotationAngles.Count) currentRotationAngleIndex = 0;
+            if (currentRotationAngleIndex >= rotationAngles.Count) currentRotationAngleIndex = 0;
 
             //Start rotation
             isRotating = true;

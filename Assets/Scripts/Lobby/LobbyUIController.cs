@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 
@@ -11,10 +12,9 @@ namespace CaveExplorer
     {
         [Header("CANVAS REFERENCES")]
         [SerializeField] private GameObject lobbyCanvas;
-        [SerializeField] private GameObject player1Explorer;
-        [SerializeField] private GameObject player1Guide;
-        [SerializeField] private GameObject player2Explorer;
-        [SerializeField] private GameObject player2Guide;
+        [SerializeField] private GameObject player1ReadyText;
+        [SerializeField] private GameObject player2ReadyText;
+        [SerializeField] private Button startButton;
 
         [Header("SFX")]
         [SerializeField] private AudioClip buttonPressedSFX;
@@ -48,7 +48,7 @@ namespace CaveExplorer
         public void OnStartPressed()
         {
             Debug.Log("CONFIRM PRESSEED");
-            photonView.RPC(nameof(StartGame), RpcTarget.AllBufferedViaServer);
+            photonView.RPC(nameof(StartGame), RpcTarget.AllBufferedViaServer, gameManager.isPlayer1);
         }
 
         //public void OnSwapPressed()
@@ -82,18 +82,35 @@ namespace CaveExplorer
         //}
 
         [PunRPC]
-        private void StartGame()
+        private void StartGame(bool _isPlayer1)
         {
-            //gameManager.player1IsGuide = _player1IsGuide;
+            if(_isPlayer1)
+            {
+                player1ReadyText.SetActive(true);
+            }
+            else
+            {
+                player2ReadyText.SetActive(true);
+            }
 
-            //Hide Lobby Canvas
-            lobbyCanvas.transform.localScale = Vector3.zero;
+            //Disable Start button once pressed
+            if((_isPlayer1 && gameManager.isPlayer1) || (!_isPlayer1 && !gameManager.isPlayer1))
+            {
+                startButton.interactable = false;
+            }
 
-            //Play Button Pressed SFX
-            PlaySFX(buttonPressedSFX);
+            //If both player are ready, start the game
+            if(player1ReadyText.activeSelf && player2ReadyText.activeSelf)
+            {
+                //Hide Lobby Canvas
+                lobbyCanvas.transform.localScale = Vector3.zero;
 
-            //Invoke Lobby Confirmed delegate
-            gameManager.OnLobbyStartPressed?.Invoke();
+                //Play Button Pressed SFX
+                PlaySFX(buttonPressedSFX);
+
+                //Invoke Lobby Confirmed delegate
+                gameManager.OnLobbyStartPressed?.Invoke();
+            }
         }
     }
 }

@@ -10,7 +10,12 @@ namespace CaveExplorer
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("PLAYER PROPS")]
         [SerializeField] private GameObject headMountedLight;
+
+        [Header("RETICLE")]
+        [SerializeField] private Transform reticle;
+        [SerializeField] private List<Vector3> reticleScale;
 
         private Recorder recorder;
         [HideInInspector] public float speakerAmp;
@@ -21,6 +26,7 @@ namespace CaveExplorer
             recorder = FindObjectOfType<Recorder>();
             recorder.TransmitEnabled = false;
 
+            SetReticleScale(1);
             ToggleHeadMountedLight(false);
         }
 
@@ -54,6 +60,9 @@ namespace CaveExplorer
             }
         }
 
+        /// <summary>
+        /// Enables transmission for voice chat
+        /// </summary>
         public void EnableVoiceChat()
         {
             if (recorder != null && !recorder.TransmitEnabled)
@@ -62,6 +71,9 @@ namespace CaveExplorer
             }
         }
 
+        /// <summary>
+        /// Disables transmission for voice chat
+        /// </summary>
         public void DisableVoiceChat()
         {
             if (recorder != null && recorder.TransmitEnabled)
@@ -70,19 +82,41 @@ namespace CaveExplorer
             }
         }
 
+        /// <summary>
+        /// Sets player variables when game starts
+        /// </summary>
         public void SetPlayerVariables()
         {
+            SetReticleScale(0);
             ToggleHeadMountedLight(true);
         }
 
+        /// <summary>
+        /// Toggles player headlight on/off
+        /// </summary>
+        /// <param name="state"></param>
         public void ToggleHeadMountedLight(bool state)
         {
             headMountedLight.SetActive(state);
         }
 
+        /// <summary>
+        /// Sets player position
+        /// </summary>
+        /// <param name="_position"></param>
         public void SetPlayerPos(Vector3 _position)
         {
             transform.position = _position;
+        }
+
+        /// <summary>
+        /// Sets reticle scale
+        /// | 0 = Teleport | 1 = UI
+        /// </summary>
+        /// <param name="_index"></param>
+        public void SetReticleScale(int _index)
+        {
+            reticle.localScale = reticleScale[_index];
         }
     }
 }

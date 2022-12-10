@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,8 +40,8 @@ namespace CaveExplorer
         private IEnumerator LoadEnvironmentAsync(Environment _env, UnityAction _callback = null)
         {
             //Load Environment from Resource
-            ResourceRequest _req = Resources.LoadAsync<GameObject>(envNamePrefix +_env.name);
-            while(!_req.isDone)
+            ResourceRequest _req = Resources.LoadAsync<GameObject>(envNamePrefix + _env.name);
+            while (!_req.isDone)
             {
                 yield return null;
             }
@@ -54,6 +55,8 @@ namespace CaveExplorer
 
             //Adjust fog density for the new environment
             RenderSettings.fogDensity = _env.fogDensity;
+
+            yield return new WaitForEndOfFrame();
 
             //Invoke callback once environment is done loading
             _callback?.Invoke();
