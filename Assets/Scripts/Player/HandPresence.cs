@@ -17,6 +17,8 @@ namespace CaveExplorer
         private GameObject spawnedHandModel;
         private Animator handAnimator;
 
+        [HideInInspector] public bool suspendHandAnimation;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -54,6 +56,9 @@ namespace CaveExplorer
 
         void UpdateHandAnimation()
         {
+            if (suspendHandAnimation)
+                return;
+
             if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue))
             {
                 handAnimator.SetFloat("Trigger", triggerValue);

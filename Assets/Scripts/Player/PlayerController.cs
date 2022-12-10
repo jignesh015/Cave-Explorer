@@ -12,6 +12,11 @@ namespace CaveExplorer
     {
         [Header("PLAYER PROPS")]
         [SerializeField] private GameObject headMountedLight;
+        [SerializeField] private GameObject walkieTalkie;
+
+        [Header("PLAYER HANDS")]
+        [SerializeField] private HandPresence leftHandPresence;
+        [SerializeField] private HandPresence rightHandPresence;
 
         [Header("RETICLE")]
         [SerializeField] private Transform reticle;
@@ -28,6 +33,7 @@ namespace CaveExplorer
 
             SetReticleScale(1);
             ToggleHeadMountedLight(false);
+            ToggleWalkieTalkie(false);
         }
 
         // Update is called once per frame
@@ -85,10 +91,15 @@ namespace CaveExplorer
         /// <summary>
         /// Sets player variables when game starts
         /// </summary>
-        public void SetPlayerVariables()
+        public void SetPlayerVariablesOnGameStart()
         {
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
+            ToggleWalkieTalkie(true);
+
+            //Suspend animations for left hand
+            //TODO: ADD NEW ANIMATIONS FOR WALKIE TALKIE
+            leftHandPresence.suspendHandAnimation = true;
         }
 
         /// <summary>
@@ -98,6 +109,15 @@ namespace CaveExplorer
         public void ToggleHeadMountedLight(bool state)
         {
             headMountedLight.SetActive(state);
+        }
+
+        /// <summary>
+        /// Toggles walkie talkie on/off
+        /// </summary>
+        /// <param name="state"></param>
+        public void ToggleWalkieTalkie(bool state)
+        {
+            walkieTalkie.SetActive(state);
         }
 
         /// <summary>

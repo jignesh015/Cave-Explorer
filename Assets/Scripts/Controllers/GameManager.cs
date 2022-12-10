@@ -111,7 +111,7 @@ namespace CaveExplorer
             envController.UnloadEnvironment(envController.lobbyEnv);
 
             //Set player variables
-            playerController.SetPlayerVariables();
+            playerController.SetPlayerVariablesOnGameStart();
         }
 
         /// <summary>
