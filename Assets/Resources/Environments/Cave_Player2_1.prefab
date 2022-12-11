@@ -107,6 +107,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8144101726346918969, guid: 782df24c8e7fc3d4697b210c98d46de9,
+        type: 3}
+      propertyPath: moveOffset
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 8883186388281492793, guid: 782df24c8e7fc3d4697b210c98d46de9,
         type: 3}
       propertyPath: m_IsActive

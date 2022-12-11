@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace CaveExplorer
 {
@@ -17,6 +19,15 @@ namespace CaveExplorer
         [SerializeField] private Transform player1SpawnPoint;
         [SerializeField] private Transform player2SpawnPoint;
 
+        [Header("POST PROCESSING REFERENCES")]
+        [SerializeField] private Volume ppv;
+        [SerializeField] private float postExposureDefault;
+        [SerializeField] private float postExposureFadeToWhite;
+
+        [Header("SCRIPT REFERENCES")]
+        [HideInInspector] public EnvironmentController envController;
+        [HideInInspector] public PlayerController playerController;
+
         [Header("NETWORK EVENTS")]
         public UnityEvent OnConnectedToServer;
         public UnityEvent OnJoinedRoom;
@@ -26,12 +37,10 @@ namespace CaveExplorer
         [Header("UI EVENTS")]
         public UnityEvent OnLobbyStartPressed;
 
-        [Header("SCRIPT REFERENCES")]
-        [HideInInspector] public EnvironmentController envController;
-        [HideInInspector] public PlayerController playerController;
-
         [Header("DEBUG ONLY")]
         public bool enableSinglePlayerMode;
+
+        private ColorAdjustments colorAdjustments;
 
         public static GameManager Instance { get; private set; }
 
@@ -58,6 +67,9 @@ namespace CaveExplorer
             //Add delegate
             OnLobbyStartPressed.AddListener(StartGame);
             OnConnectedToServer.AddListener(ConnectedToServer);
+
+            //Populate PPV reference
+            ppv.profile.TryGet(out colorAdjustments);
         }
 
         // Update is called once per frame
@@ -125,6 +137,30 @@ namespace CaveExplorer
             {
                 _np.gameObject.SetActive(_state);
             }
+        }
+
+        /// <summary>
+        /// Fade the scene to white by updating the post exposure value
+        /// </summary>
+        public void FadeToWhite()
+        {
+            StartCoroutine(FadeToWhiteAsync());
+        }
+
+        private IEnumerator FadeToWhiteAsync()
+        {
+            //Fade out scene
+            float _elapsedTime = 0;
+            float _fadeOutTime = 10f;
+            float _postExposureValue = postExposureDefault;
+            while (_elapsedTime < _fadeOutTime)
+            {
+                _postExposureValue = Mathf.Lerp(_postExposureValue, postExposureFadeToWhite, (_elapsedTime / _fadeOutTime));
+                colorAdjustments.postExposure.Override(_postExposureValue);
+                _elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            colorAdjustments.postExposure.Override(postExposureFadeToWhite);
         }
     }
 }

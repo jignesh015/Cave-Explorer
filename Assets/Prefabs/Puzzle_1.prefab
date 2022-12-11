@@ -154,12 +154,21 @@ MonoBehaviour:
   - {fileID: 812900852966190055}
   - {fileID: 9030003727536481454}
   - {fileID: 7993021545278406560}
+  steeringWheelRigidBody:
+  - {fileID: 1897252748}
+  - {fileID: 8651280688675214270}
+  - {fileID: 5195393686966666856}
+  - {fileID: 356352622638917225}
   currentWheel: {fileID: 0}
   wheelAngle: 0
   startWheelRot: {x: 0, y: 0, z: 0, w: 0}
   currentWheelRot: {x: 0, y: 0, z: 0, w: 0}
   wheelRotationCount: 0
   puzzleSolvedSFX: {fileID: 8300000, guid: c7f3679856dbea0498d079587b97a354, type: 3}
+  doorSlideSFX: {fileID: 8300000, guid: 15e7166812195b44693b48e5e1962349, type: 3}
+  moveOffset: 1
+  moveDuration: 3
+  puzzleSolvedDebug: 0
 --- !u!82 &4518449932327324810
 AudioSource:
   m_ObjectHideFlags: 0
@@ -506,6 +515,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75a23c82c6fda294c83b024be5456a7a, type: 3}
+--- !u!54 &1897252748 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2335594269656754482, guid: 75a23c82c6fda294c83b024be5456a7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2335594271014514366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2632746973453971273 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 351518201147064823, guid: 75a23c82c6fda294c83b024be5456a7a,
@@ -1020,6 +1035,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75a23c82c6fda294c83b024be5456a7a, type: 3}
+--- !u!54 &356352622638917225 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2335594269656754482, guid: 75a23c82c6fda294c83b024be5456a7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2637902458809995099}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2340571901732802220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 351518201147064823, guid: 75a23c82c6fda294c83b024be5456a7a,
@@ -2211,6 +2232,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6369839669403384460}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &8651280688675214270 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2335594269656754482, guid: 75a23c82c6fda294c83b024be5456a7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6369839669403384460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7525529911837110106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2395,6 +2422,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75a23c82c6fda294c83b024be5456a7a, type: 3}
+--- !u!54 &5195393686966666856 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2335594269656754482, guid: 75a23c82c6fda294c83b024be5456a7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7525529911837110106}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7822992676626902701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 351518201147064823, guid: 75a23c82c6fda294c83b024be5456a7a,

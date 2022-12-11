@@ -19,6 +19,7 @@ namespace CaveExplorer
         [SerializeField] private List<PuzzlePiece> puzzlePieces;
 
         [Header("STEERING WHEELS")]
+        [SerializeField] private List<Rigidbody> steeringWheelRigidBody;
         [SerializeField] private Transform currentWheel;
         [SerializeField] private float wheelAngle;
         [SerializeField] private Quaternion startWheelRot;
@@ -27,6 +28,14 @@ namespace CaveExplorer
 
         [Header("SFX")]
         [SerializeField] private AudioClip puzzleSolvedSFX;
+        [SerializeField] private AudioClip doorSlideSFX;
+
+        [Header("PUZZLE DOOR MOVEMENT")]
+        [SerializeField] private float moveOffset;
+        [SerializeField] private float moveDuration;
+
+        [Header("DEBUG ONLY")]
+        [SerializeField] private bool puzzleSolvedDebug;
 
         private bool completedHalfRotation;
         private bool completedFullRotation;
@@ -104,6 +113,12 @@ namespace CaveExplorer
         // Update is called once per frame
         void Update()
         {
+            if(puzzleSolvedDebug)
+            {
+                isPuzzleSolved= false;
+                PuzzleSolved();
+            }
+
             if(currentWheel!= null && !completedFullRotation)
             {
                 currentWheelRot = currentWheel.rotation;
@@ -211,6 +226,11 @@ namespace CaveExplorer
             audioSource.Play();
         }
 
+        public void StopSFX()
+        {
+            audioSource.Stop();
+        }
+
         /// <summary>
         /// Raises a custom Photon event using the given parameters
         /// </summary>
@@ -292,10 +312,45 @@ namespace CaveExplorer
             if (isPuzzleSolved) return;
 
             isPuzzleSolved = true;
+            puzzleSolvedDebug = false;
             PlaySFX(puzzleSolvedSFX);
-            Destroy(gameObject, 2f);
 
             //TODO: PUZZLE COMPLETION LOGIC
+
+            //Lerp Puzzle piece to side
+            StartCoroutine(MovePuzzleDoorToSide());
+        }
+
+        /// <summary>
+        /// Lerps puzzle door to the side on puzzle completion
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator MovePuzzleDoorToSide()
+        {
+            //Make all rigid bodies kinematic
+            foreach(Rigidbody _rb in steeringWheelRigidBody)
+            {
+                _rb.isKinematic = true;
+            }
+
+            yield return new WaitForSeconds(1.5f);
+
+            PlaySFX(doorSlideSFX);
+
+            float startTime = Time.time;
+            Vector3 _startPos = transform.localPosition;
+            Vector3 _endPos = new Vector3(_startPos.x, _startPos.y, _startPos.z - moveOffset);
+
+            while (Time.time < startTime + moveDuration)
+            {
+                transform.localPosition = Vector3.Lerp(_startPos, _endPos, (Time.time - startTime) / moveDuration);
+                yield return null;
+            }
+            transform.localPosition = _endPos;
+            StopSFX();
+
+            //Fade to white
+            GameManager.Instance.FadeToWhite();
         }
     }
 }
