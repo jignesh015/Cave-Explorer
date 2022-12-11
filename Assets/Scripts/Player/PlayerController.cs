@@ -5,6 +5,7 @@ using UnityEngine.XR;
 using Photon.Pun;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace CaveExplorer
 {
@@ -17,6 +18,7 @@ namespace CaveExplorer
         [Header("PLAYER HANDS")]
         [SerializeField] private HandPresence leftHandPresence;
         [SerializeField] private HandPresence rightHandPresence;
+        [SerializeField] private XRDirectInteractor rightDirectInteractor;
 
         [Header("RETICLE")]
         [SerializeField] private Transform reticle;
@@ -139,6 +141,15 @@ namespace CaveExplorer
         public void SetReticleScale(int _index)
         {
             reticle.localScale = reticleScale[_index];
+        }
+
+        /// <summary>
+        /// Toggles direct interactor on/off
+        /// </summary>
+        /// <param name="state"></param>
+        public void ToggleXRDirectInteractor(bool state)
+        {
+            rightDirectInteractor.enabled = state;
         }
     }
 }

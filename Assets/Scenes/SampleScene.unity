@@ -1003,6 +1003,7 @@ MonoBehaviour:
   walkieTalkie: {fileID: 2112301879}
   leftHandPresence: {fileID: 1213974545}
   rightHandPresence: {fileID: 1319034157}
+  rightDirectInteractor: {fileID: 823178421}
   reticle: {fileID: 1961928827}
   reticleScale:
   - {x: 0.4, y: 0.005, z: 0.4}
@@ -1237,7 +1238,7 @@ MonoBehaviour:
   player2SpawnPoint: {fileID: 1895398287}
   ppv: {fileID: 832575518}
   postExposureDefault: 0
-  postExposureFadeToWhite: 10
+  postExposureFadeToWhite: 15
   envController: {fileID: 0}
   playerController: {fileID: 0}
   OnConnectedToServer:

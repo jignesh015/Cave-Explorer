@@ -151,7 +151,7 @@ namespace CaveExplorer
         {
             //Fade out scene
             float _elapsedTime = 0;
-            float _fadeOutTime = 10f;
+            float _fadeOutTime = 15f;
             float _postExposureValue = postExposureDefault;
             while (_elapsedTime < _fadeOutTime)
             {

@@ -327,6 +327,9 @@ namespace CaveExplorer
         /// <returns></returns>
         private IEnumerator MovePuzzleDoorToSide()
         {
+            //Disable right hand direct interactor
+            GameManager.Instance.playerController.ToggleXRDirectInteractor(false);
+
             //Make all rigid bodies kinematic
             foreach(Rigidbody _rb in steeringWheelRigidBody)
             {
@@ -348,6 +351,8 @@ namespace CaveExplorer
             }
             transform.localPosition = _endPos;
             StopSFX();
+
+            yield return new WaitForSeconds(0.25f);
 
             //Fade to white
             GameManager.Instance.FadeToWhite();
