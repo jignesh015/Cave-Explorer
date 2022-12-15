@@ -135,7 +135,7 @@ namespace CaveExplorer
             List<NetworkPlayer> _networkPlayers = FindObjectsOfType<NetworkPlayer>().ToList();
             foreach(NetworkPlayer _np in _networkPlayers)
             {
-                _np.gameObject.SetActive(_state);
+                _np.transform.localScale = _state ? Vector3.one : Vector3.zero;
             }
         }
 
