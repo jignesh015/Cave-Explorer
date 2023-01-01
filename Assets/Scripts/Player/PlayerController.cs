@@ -6,6 +6,8 @@ using Photon.Pun;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine.XR.Interaction.Toolkit;
+using TMPro;
+using System;
 
 namespace CaveExplorer
 {
@@ -24,8 +26,16 @@ namespace CaveExplorer
         [SerializeField] private Transform reticle;
         [SerializeField] private List<Vector3> reticleScale;
 
+        [Header("PLAYER OXYGEN LEVEL")]
+        //Oxygen timer is the amount of time the player has left till their oxygen lasts
+        [SerializeField] private float maxOxygenTimer;
+        [SerializeField] private float currentOxygenTimer;
+        [SerializeField] private TextMeshProUGUI oxygenTimerDisplay;
+
         private Recorder recorder;
         [HideInInspector] public float speakerAmp;
+
+        private bool isInGame;
 
         // Start is called before the first frame update
         void Start()
@@ -41,6 +51,7 @@ namespace CaveExplorer
         // Update is called once per frame
         void Update()
         {
+            //Enable/Disable voice chat based on user input 
             if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
             {
                 bool triggerValue;
@@ -66,6 +77,31 @@ namespace CaveExplorer
                     speakerAmp = 0;
                 }
             }
+
+            //Start decreasing oxygen level when player are in game
+            if(isInGame)
+            {
+                currentOxygenTimer -= Time.deltaTime;
+                DisplayCurrentOxygenTimer(currentOxygenTimer);
+                if (currentOxygenTimer <= 0)
+                {
+                    isInGame= false;
+                    DisplayCurrentOxygenTimer(0);
+
+                    //TODO: GAME OVER LOGIC
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Displays the current oxygen timer to the user
+        /// </summary>
+        private void DisplayCurrentOxygenTimer(float _timer)
+        {
+            TimeSpan time = TimeSpan.FromSeconds(_timer);
+            string str = time.ToString(@"mm\:ss");
+            oxygenTimerDisplay.text= str;
         }
 
         /// <summary>
@@ -97,6 +133,9 @@ namespace CaveExplorer
         /// </summary>
         public void SetPlayerVariablesOnGameStart()
         {
+            isInGame = true;
+            currentOxygenTimer = maxOxygenTimer;
+
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
             ToggleWalkieTalkie(true);
