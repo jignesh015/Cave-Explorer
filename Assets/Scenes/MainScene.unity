@@ -1222,6 +1222,7 @@ MonoBehaviour:
   - {x: 0.05, y: 0.005, z: 0.05}
   maxOxygenTimer: 600
   currentOxygenTimer: 0
+  playerHandCanvas: {fileID: 1333302994}
   oxygenTimerDisplay: {fileID: 1507544454}
   speakerAmp: 0
 --- !u!1 &636377629
@@ -1453,7 +1454,7 @@ MonoBehaviour:
   player2SpawnPoint: {fileID: 1895398287}
   ppv: {fileID: 832575518}
   postExposureDefault: 0
-  postExposureFadeToWhite: 15
+  postExposureFadeToBlack: -15
   envController: {fileID: 0}
   playerController: {fileID: 0}
   OnConnectedToServer:
@@ -3344,7 +3345,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 503
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0

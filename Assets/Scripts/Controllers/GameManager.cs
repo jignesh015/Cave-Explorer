@@ -22,7 +22,7 @@ namespace CaveExplorer
         [Header("POST PROCESSING REFERENCES")]
         [SerializeField] private Volume ppv;
         [SerializeField] private float postExposureDefault;
-        [SerializeField] private float postExposureFadeToWhite;
+        [SerializeField] private float postExposureFadeToBlack;
 
         [Header("SCRIPT REFERENCES")]
         [HideInInspector] public EnvironmentController envController;
@@ -123,7 +123,7 @@ namespace CaveExplorer
             envController.UnloadEnvironment(envController.lobbyEnv);
 
             //Set player variables
-            playerController.SetPlayerVariablesOnGameStart();
+            playerController.SetPlayerVariablesForGame();
         }
 
         /// <summary>
@@ -140,27 +140,35 @@ namespace CaveExplorer
         }
 
         /// <summary>
-        /// Fade the scene to white by updating the post exposure value
+        /// Fade the scene to black by updating the post exposure value
         /// </summary>
-        public void FadeToWhite()
+        public void FadeToBlack()
         {
-            StartCoroutine(FadeToWhiteAsync());
+            StartCoroutine(FadeSceneAsync(postExposureDefault, postExposureFadeToBlack));
         }
 
-        private IEnumerator FadeToWhiteAsync()
+        /// <summary>
+        /// Fade the scene to normal by updating the post exposure value
+        /// </summary>
+        public void FadeToNormal()
+        {
+            StartCoroutine(FadeSceneAsync(postExposureFadeToBlack, postExposureDefault));
+        }
+
+        private IEnumerator FadeSceneAsync(float _startValue, float _endValue)
         {
             //Fade out scene
             float _elapsedTime = 0;
             float _fadeOutTime = 15f;
-            float _postExposureValue = postExposureDefault;
+            float _postExposureValue = _startValue;
             while (_elapsedTime < _fadeOutTime)
             {
-                _postExposureValue = Mathf.Lerp(_postExposureValue, postExposureFadeToWhite, (_elapsedTime / _fadeOutTime));
+                _postExposureValue = Mathf.Lerp(_postExposureValue, _endValue, (_elapsedTime / _fadeOutTime));
                 colorAdjustments.postExposure.Override(_postExposureValue);
                 _elapsedTime += Time.deltaTime;
                 yield return null;
             }
-            colorAdjustments.postExposure.Override(postExposureFadeToWhite);
+            colorAdjustments.postExposure.Override(_endValue);
         }
     }
 }

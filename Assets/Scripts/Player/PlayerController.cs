@@ -30,6 +30,7 @@ namespace CaveExplorer
         //Oxygen timer is the amount of time the player has left till their oxygen lasts
         [SerializeField] private float maxOxygenTimer;
         [SerializeField] private float currentOxygenTimer;
+        [SerializeField] private GameObject playerHandCanvas;
         [SerializeField] private TextMeshProUGUI oxygenTimerDisplay;
 
         private Recorder recorder;
@@ -41,11 +42,7 @@ namespace CaveExplorer
         void Start()
         {
             recorder = FindObjectOfType<Recorder>();
-            recorder.TransmitEnabled = false;
-
-            SetReticleScale(1);
-            ToggleHeadMountedLight(false);
-            ToggleWalkieTalkie(false);
+            SetPlayerVariablesForLobby();
         }
 
         // Update is called once per frame
@@ -131,7 +128,7 @@ namespace CaveExplorer
         /// <summary>
         /// Sets player variables when game starts
         /// </summary>
-        public void SetPlayerVariablesOnGameStart()
+        public void SetPlayerVariablesForGame()
         {
             isInGame = true;
             currentOxygenTimer = maxOxygenTimer;
@@ -139,10 +136,24 @@ namespace CaveExplorer
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
             ToggleWalkieTalkie(true);
+            TogglePlayerHandCanvas(true);
 
             //Suspend animations for left hand
             //TODO: ADD NEW ANIMATIONS FOR WALKIE TALKIE
             leftHandPresence.suspendHandAnimation = true;
+        }
+
+        public void SetPlayerVariablesForLobby()
+        {
+            isInGame = false;
+            recorder.TransmitEnabled = false;
+
+            SetReticleScale(1);
+            ToggleHeadMountedLight(false);
+            ToggleWalkieTalkie(false);
+            TogglePlayerHandCanvas(false);
+
+            leftHandPresence.suspendHandAnimation = false;
         }
 
         /// <summary>
@@ -161,6 +172,15 @@ namespace CaveExplorer
         public void ToggleWalkieTalkie(bool state)
         {
             walkieTalkie.gameObject.SetActive(state);
+        }
+
+        /// <summary>
+        /// Toggles the hand canvas on/off
+        /// </summary>
+        /// <param name="state"></param>
+        public void TogglePlayerHandCanvas(bool state)
+        {
+            playerHandCanvas.SetActive(state);
         }
 
         /// <summary>

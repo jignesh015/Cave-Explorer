@@ -354,8 +354,8 @@ namespace CaveExplorer
 
             yield return new WaitForSeconds(0.25f);
 
-            //Fade to white
-            GameManager.Instance.FadeToWhite();
+            //Fade to black
+            GameManager.Instance.FadeToBlack();
         }
     }
 }
