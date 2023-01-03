@@ -15,8 +15,8 @@ TagManager:
   - Body
   - PuzzlePiece
   - Void
-  - 
-  - 
+  - HolePiece
+  - HoleCollider
   - 
   - 
   - 
