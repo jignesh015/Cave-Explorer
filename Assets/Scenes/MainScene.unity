@@ -1870,6 +1870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69edf009c1f69848ab43ce30cb93da3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  caveLevel: -1
   envNamePrefix: Environments/
   lobbyEnv:
     name: Lobby_Environment
@@ -1879,6 +1880,12 @@ MonoBehaviour:
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     fogDensity: 0.09
   player1CaveEnvList:
+  - name: Cave_Player1_1
+    environmentSpawnPos: {x: 0, y: 0, z: 0}
+    environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
+    playerSpawnPos: {x: 0, y: 0, z: 0}
+    playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
+    fogDensity: 0.06
   - name: Cave_Player1_2
     environmentSpawnPos: {x: 0, y: 0, z: 0}
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
@@ -1886,6 +1893,12 @@ MonoBehaviour:
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     fogDensity: 0.06
   player2CaveEnvList:
+  - name: Cave_Player2_1
+    environmentSpawnPos: {x: 0, y: 0, z: 0}
+    environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
+    playerSpawnPos: {x: 0, y: 0, z: 0}
+    playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
+    fogDensity: 0.06
   - name: Cave_Player2_2
     environmentSpawnPos: {x: 0, y: 0, z: 0}
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}

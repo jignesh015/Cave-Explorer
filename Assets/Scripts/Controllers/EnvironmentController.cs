@@ -9,16 +9,20 @@ namespace CaveExplorer
 {
     public class EnvironmentController : MonoBehaviour
     {
+        public int caveLevel = -1;
+
         [Header("ENVIRONMENTS")]
         [SerializeField] private string envNamePrefix;
         public Environment lobbyEnv;
         public List<Environment> player1CaveEnvList;
         public List<Environment> player2CaveEnvList;
 
+        private Environment currentlyLoadedEnvironment;
+
         // Start is called before the first frame update
         void Start()
         {
-        
+            currentlyLoadedEnvironment = lobbyEnv;
         }
 
         // Update is called once per frame
@@ -32,12 +36,12 @@ namespace CaveExplorer
         /// </summary>
         /// <param name="_env"></param>
         /// <param name="_callback"></param>
-        public void LoadEnvironment(Environment _env, UnityAction _callback = null)
+        public void LoadEnvironment(Environment _env, UnityAction _callback = null, bool _unloadPrevEnv = false)
         {
-            StartCoroutine(LoadEnvironmentAsync(_env, _callback));
+            StartCoroutine(LoadEnvironmentAsync(_env, _callback, _unloadPrevEnv));
         }
 
-        private IEnumerator LoadEnvironmentAsync(Environment _env, UnityAction _callback = null)
+        private IEnumerator LoadEnvironmentAsync(Environment _env, UnityAction _callback = null, bool _unloadPrevEnv = false)
         {
             //Load Environment from Resource
             ResourceRequest _req = Resources.LoadAsync<GameObject>(envNamePrefix + _env.name);
@@ -58,6 +62,9 @@ namespace CaveExplorer
 
             yield return new WaitForEndOfFrame();
 
+            if(_unloadPrevEnv) UnloadPreviousEnvironment();
+            currentlyLoadedEnvironment = _env;
+
             //Invoke callback once environment is done loading
             _callback?.Invoke();
         }
@@ -74,6 +81,17 @@ namespace CaveExplorer
             {
                 Debug.LogFormat("<color=red>Unloading {0}</color>", _envObj.name);
                 Destroy(_envObj, _delay);
+            }
+        }
+
+        /// <summary>
+        /// Destroys the previously loaded environment
+        /// </summary>
+        public void UnloadPreviousEnvironment()
+        {
+            if(currentlyLoadedEnvironment != null)
+            {
+                UnloadEnvironment(currentlyLoadedEnvironment);
             }
         }
     }

@@ -102,16 +102,51 @@ namespace CaveExplorer
         /// </summary>
         public void StartGame()
         {
+            GoToNextCave();
+        }
+
+        /// <summary>
+        /// Increments the cave level and loads the new cave environment
+        /// </summary>
+        public void GoToNextCave()
+        {
+            StartCoroutine(GoToNextCaveAsync());
+        }
+
+        private IEnumerator GoToNextCaveAsync()
+        {
+            //Fade to black
+            FadeToBlack();
+
+            yield return new WaitForSeconds(2f);
+
+            //Increment cave level
+            envController.caveLevel++;
+
+            //Load the fisrt cave environment
+            LoadCaveEnvironment(envController.caveLevel);
+
+            //Switch off network players
+            ToggleNetworkPlayers(false);
+        }
+
+        /// <summary>
+        /// Loads the cave environment as per the given cave level
+        /// And places the player at the start position
+        /// </summary>
+        /// <param name="_caveIndex"></param>
+        public void LoadCaveEnvironment(int _caveIndex)
+        {
             //Load cave environment for respective player
-            Environment _envToLoad = isPlayer1 ? envController.player1CaveEnvList[0]
-                : envController.player2CaveEnvList[0];
-            envController.LoadEnvironment(_envToLoad, OnNewEnvLoaded);
+            Environment _envToLoad = isPlayer1 ? envController.player1CaveEnvList[_caveIndex]
+                : envController.player2CaveEnvList[_caveIndex];
+            envController.LoadEnvironment(_envToLoad, OnNewEnvLoaded, true);
 
             //Place player in their starting position
             playerController.SetPlayerPos(_envToLoad.playerSpawnPos);
 
-            //Switch off network players
-            ToggleNetworkPlayers(false);
+            //Set the player rotation
+            playerController.SetPlayerRot(_envToLoad.playerSpawnRot);
         }
 
         /// <summary>
@@ -119,11 +154,11 @@ namespace CaveExplorer
         /// </summary>
         public void OnNewEnvLoaded()
         {
-            //Remove Lobby Environment
-            envController.UnloadEnvironment(envController.lobbyEnv);
-
             //Set player variables
             playerController.SetPlayerVariablesForGame();
+
+            //Fade to normal
+            FadeToNormal();
         }
 
         /// <summary>
@@ -152,6 +187,7 @@ namespace CaveExplorer
         /// </summary>
         public void FadeToNormal()
         {
+            StopCoroutine(nameof(FadeSceneAsync));
             StartCoroutine(FadeSceneAsync(postExposureFadeToBlack, postExposureDefault));
         }
 

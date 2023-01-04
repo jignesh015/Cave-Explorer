@@ -195,6 +195,15 @@ namespace CaveExplorer
         }
 
         /// <summary>
+        /// Sets player rotation
+        /// </summary>
+        /// <param name="_rotation"></param>
+        public void SetPlayerRot(Quaternion _rotation)
+        {
+            transform.rotation = _rotation;
+        }
+
+        /// <summary>
         /// Sets reticle scale
         /// | 0 = Teleport | 1 = UI
         /// </summary>
