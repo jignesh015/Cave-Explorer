@@ -49,7 +49,7 @@ namespace CaveExplorer
         {
             audioSource = GetComponent<AudioSource>();
 
-            IntializePuzzle();
+            InitializePuzzle();
         }
 
         private void OnEnable()
@@ -62,7 +62,10 @@ namespace CaveExplorer
             PhotonNetwork.NetworkingClient.EventReceived -= OnCustomEvent;
         }
 
-        public void IntializePuzzle()
+        /// <summary>
+        /// Initializes the puzzle and syncs it for all the players
+        /// </summary>
+        public void InitializePuzzle()
         {
             if (!GameManager.Instance.isPlayer1)
                 return;
@@ -177,7 +180,7 @@ namespace CaveExplorer
 
             //Raise photon event for Checking if puzzle solved
             string _symbolString = GetSymbolIndexString();
-            RaiseCustomEvent(StaticData.CheckIfPuzzleSolvedEventCode,
+            RaiseCustomEvent(StaticData.CheckIfSWPuzzleSolvedEventCode,
                    new object[] { GameManager.Instance.isPlayer1, _symbolString });
         }
 
@@ -232,22 +235,17 @@ namespace CaveExplorer
         }
 
         /// <summary>
-        /// Raises a custom Photon event using the given parameters
+        /// This function receives the custom RPC events sent by any player
         /// </summary>
-        public void RaiseCustomEvent(byte _eventCode, object[] _content)
-        {
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; 
-            PhotonNetwork.RaiseEvent(_eventCode, _content, raiseEventOptions, SendOptions.SendReliable);
-        }
-
+        /// <param name="photonEvent"></param>
         public void OnCustomEvent(EventData photonEvent)
         {
             byte eventCode = photonEvent.Code;
             if (eventCode == StaticData.AssignPuzzlePieceSymbolsEventCode)
                 AssignPuzzlePieceSymbols((object[])photonEvent.CustomData);
-            else if(eventCode == StaticData.CheckIfPuzzleSolvedEventCode)
+            else if(eventCode == StaticData.CheckIfSWPuzzleSolvedEventCode)
                 CheckIfPuzzleSolved((object[])photonEvent.CustomData);
-            else if (eventCode == StaticData.PuzzleSolvedEventCode)
+            else if (eventCode == StaticData.SWPuzzleSolvedEventCode)
                 PuzzleSolved();
         }
 
@@ -295,7 +293,7 @@ namespace CaveExplorer
                     Debug.LogFormat("<color=green>PUZZLE IS SOLVED</color>");
 
                     //Raise photon event to notify each player
-                    RaiseCustomEvent(StaticData.PuzzleSolvedEventCode, null);
+                    RaiseCustomEvent(StaticData.SWPuzzleSolvedEventCode, null);
                 }
                 else
                 {
@@ -314,8 +312,6 @@ namespace CaveExplorer
             isPuzzleSolved = true;
             puzzleSolvedDebug = false;
             PlaySFX(puzzleSolvedSFX);
-
-            //TODO: PUZZLE COMPLETION LOGIC
 
             //Lerp Puzzle piece to side
             StartCoroutine(MovePuzzleDoorToSide());

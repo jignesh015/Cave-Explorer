@@ -1,3 +1,6 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +23,15 @@ namespace CaveExplorer
         public virtual void OnPuzzleSolved()
         {
 
+        }
+
+        /// <summary>
+        /// Raises a custom Photon event using the given parameters
+        /// </summary>
+        public virtual void RaiseCustomEvent(byte _eventCode, object[] _content)
+        {
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            PhotonNetwork.RaiseEvent(_eventCode, _content, raiseEventOptions, SendOptions.SendReliable);
         }
     }
 }

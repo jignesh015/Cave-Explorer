@@ -137,6 +137,7 @@ namespace CaveExplorer
             ToggleHeadMountedLight(true);
             ToggleWalkieTalkie(true);
             TogglePlayerHandCanvas(true);
+            ToggleXRDirectInteractor(true);
 
             //Suspend animations for left hand
             //TODO: ADD NEW ANIMATIONS FOR WALKIE TALKIE
@@ -152,6 +153,7 @@ namespace CaveExplorer
             ToggleHeadMountedLight(false);
             ToggleWalkieTalkie(false);
             TogglePlayerHandCanvas(false);
+            ToggleXRDirectInteractor(true);
 
             leftHandPresence.suspendHandAnimation = false;
         }
