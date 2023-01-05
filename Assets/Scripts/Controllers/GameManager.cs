@@ -24,6 +24,9 @@ namespace CaveExplorer
         [SerializeField] private float postExposureDefault;
         [SerializeField] private float postExposureFadeToBlack;
 
+        [Header("SFX")]
+        [SerializeField] private AudioClip enterCaveSFX;
+
         [Header("SCRIPT REFERENCES")]
         [HideInInspector] public EnvironmentController envController;
         [HideInInspector] public PlayerController playerController;
@@ -118,7 +121,7 @@ namespace CaveExplorer
             //Fade to black
             FadeToBlack();
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
             //Increment cave level
             envController.caveLevel++;
@@ -147,6 +150,9 @@ namespace CaveExplorer
 
             //Set the player rotation
             playerController.SetPlayerRot(_envToLoad.playerSpawnRot);
+
+            //Play SFX for entering the cave
+            playerController.PlaySFX(enterCaveSFX);
         }
 
         /// <summary>

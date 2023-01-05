@@ -26,6 +26,14 @@ namespace CaveExplorer
         }
 
         /// <summary>
+        /// Is called when the player teleports
+        /// </summary>
+        public virtual void OnPlayerTeleport()
+        {
+            GameManager.Instance.playerController.OnTeleport();
+        }
+
+        /// <summary>
         /// Raises a custom Photon event using the given parameters
         /// </summary>
         public virtual void RaiseCustomEvent(byte _eventCode, object[] _content)

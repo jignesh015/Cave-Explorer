@@ -8,6 +8,7 @@ using Photon.Voice.Unity;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 using System;
+using Unity.VisualScripting;
 
 namespace CaveExplorer
 {
@@ -33,15 +34,20 @@ namespace CaveExplorer
         [SerializeField] private GameObject playerHandCanvas;
         [SerializeField] private TextMeshProUGUI oxygenTimerDisplay;
 
+        [Header("SFX")]
+        [SerializeField] private AudioClip footstepTeleportSFX;
+
         private Recorder recorder;
         [HideInInspector] public float speakerAmp;
 
         private bool isInGame;
+        private AudioSource playerAudioSource;
 
         // Start is called before the first frame update
         void Start()
         {
             recorder = FindObjectOfType<Recorder>();
+            playerAudioSource = GetComponent<AudioSource>();
             SetPlayerVariablesForLobby();
         }
 
@@ -220,6 +226,23 @@ namespace CaveExplorer
         public void ToggleXRDirectInteractor(bool state)
         {
             rightDirectInteractor.enabled = state;
+        }
+
+        /// <summary>
+        /// Is called when the player teleports
+        /// </summary>
+        public void OnTeleport()
+        {
+            //Play footstep SFX
+            PlaySFX(footstepTeleportSFX, 0.5f);
+        }
+
+        public void PlaySFX(AudioClip _clip, float _volume = 1)
+        {
+            playerAudioSource.Stop();
+            playerAudioSource.clip = _clip;
+            playerAudioSource.volume = _volume;
+            playerAudioSource.Play();
         }
     }
 }

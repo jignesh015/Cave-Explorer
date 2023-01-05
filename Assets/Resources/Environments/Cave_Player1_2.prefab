@@ -3568,7 +3568,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2477492163080938807
 GameObject:
   m_ObjectHideFlags: 0
@@ -3962,7 +3974,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3652666462751666064
 GameObject:
   m_ObjectHideFlags: 0
@@ -4535,7 +4559,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3652666463666874852
 GameObject:
   m_ObjectHideFlags: 0
@@ -5293,7 +5329,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5338625921515300242
 GameObject:
   m_ObjectHideFlags: 0
@@ -5476,7 +5524,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5338625922003047272
 GameObject:
   m_ObjectHideFlags: 0
@@ -5659,7 +5719,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6224348930291199058
 GameObject:
   m_ObjectHideFlags: 0
@@ -5842,7 +5914,19 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4617636091497370959}
+        m_TargetAssemblyTypeName: CaveExplorer.Puzzle, Assembly-CSharp
+        m_MethodName: OnPlayerTeleport
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6375050213158933861
 GameObject:
   m_ObjectHideFlags: 0
@@ -6389,6 +6473,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 595629315670835228}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4617636091497370959 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5211010271705290067, guid: 59fde80ac6354b9409e658ad3f63b565,
+    type: 3}
+  m_PrefabInstance: {fileID: 595629315670835228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5258893f821aff49bcb4c7872dca9e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6487308199039876846
 PrefabInstance:
   m_ObjectHideFlags: 0
