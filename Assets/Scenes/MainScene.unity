@@ -1571,7 +1571,7 @@ MonoBehaviour:
   OnLobbyStartPressed:
     m_PersistentCalls:
       m_Calls: []
-  enableSinglePlayerMode: 1
+  enableSinglePlayerMode: 0
 --- !u!4 &752265541
 Transform:
   m_ObjectHideFlags: 0
