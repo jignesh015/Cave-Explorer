@@ -39,7 +39,8 @@ namespace CaveExplorer
             if (devices.Count > 0)
             {
                 targetDevice = devices[0];
-                GameObject prefab = controllerPrefabs.Find(controller => controller.name == targetDevice.name);
+                //GameObject prefab = controllerPrefabs.Find(controller => controller.name == targetDevice.name);
+                GameObject prefab = controllerPrefabs.Count > 0 ? controllerPrefabs[0] : null;
                 if (prefab)
                 {
                     spawnedController = Instantiate(prefab, transform);
