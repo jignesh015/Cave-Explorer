@@ -34,18 +34,23 @@ namespace CaveExplorer
         [SerializeField] private AudioClip allTheBest;
 
         [Header("TEXT OVERLAYS")]
-        [SerializeField] private GameObject pressRightTriggerIndicator;
-        [SerializeField] private GameObject pressLeftTriggerIndicator;
-        [SerializeField] private GameObject oxygenAndRadioBatteryIndicator;
+        [SerializeField] private GameObject pressRightTriggerToSelectIndicator;
+        [SerializeField] private GameObject pressRightTriggerToTeleportIndicator;
+        [SerializeField] private GameObject pressRightGrabToInteractIndicator;
+        [SerializeField] private GameObject pressLeftTriggerToCommunicateIndicator;
+        [SerializeField] private GameObject oxygenLevelIndicator;
+        [SerializeField] private GameObject radioBatteryIndicator;
 
         private AudioSource audioSource;
         private GameManager gameManager;
+        private PlayerController playerController;
 
         // Start is called before the first frame update
         void Start()
         {
             audioSource = GetComponent<AudioSource>();
             gameManager = GameManager.Instance;
+            playerController = GameManager.Instance.playerController;
 
             StartOnboarding();
         }
@@ -59,6 +64,9 @@ namespace CaveExplorer
         {
             yield return new WaitForSeconds(onboardingStartDelay);
 
+            //Get player controller
+            if(!playerController) playerController = GameManager.Instance.playerController;
+
             //Start Welcome scenario
             PlayOnboardingScenrio(OnboardingScenario.WelcomeExplorer);
 
@@ -67,7 +75,7 @@ namespace CaveExplorer
             //Start Enter the lobby scenario
             PlayOnboardingScenrio(OnboardingScenario.EnterLobby);
             
-            //Show UI for Entering the Lobby
+            //Show Enter Lobby UI
         }
 
         // Update is called once per frame
@@ -78,8 +86,9 @@ namespace CaveExplorer
 
         public void PlayOnboardingScenrio(OnboardingScenario _scenario)
         {
-            //HideAllTextOverlays();
+            HideAllTextOverlays();
             StopOnboardingAudio();
+            playerController.ToggleControllers(false, false);
 
             switch (_scenario)
             {
@@ -89,7 +98,10 @@ namespace CaveExplorer
                     PlayOnboardingAudio(welcomeExplorer);
                     break;
                 case OnboardingScenario.EnterLobby:
+                    pressRightTriggerToSelectIndicator.SetActive(true);
                     PlayOnboardingAudio(enterLobby);
+                    //Show controllers
+                    playerController.ToggleControllers(true, true);
                     break;
                 case OnboardingScenario.WelcomeToLobby:
                     PlayOnboardingAudio(welcomeToLobby);
@@ -129,9 +141,12 @@ namespace CaveExplorer
 
         public void HideAllTextOverlays()
         {
-            pressRightTriggerIndicator.SetActive(false);
-            pressLeftTriggerIndicator.SetActive(false);
-            oxygenAndRadioBatteryIndicator.SetActive(false);
+            pressRightTriggerToSelectIndicator.SetActive(false);
+            pressRightTriggerToTeleportIndicator.SetActive(false);
+            pressRightGrabToInteractIndicator.SetActive(false);
+            pressLeftTriggerToCommunicateIndicator.SetActive(false);
+            oxygenLevelIndicator.SetActive(false);
+            radioBatteryIndicator.SetActive(false);
         }
     }
 }

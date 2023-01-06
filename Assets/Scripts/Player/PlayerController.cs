@@ -162,8 +162,6 @@ namespace CaveExplorer
             DisableVoiceChat();
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
-            ToggleWalkieTalkie(true);
-            TogglePlayerHandCanvas(true);
             ToggleXRDirectInteractor(true);
 
             //Suspend animations for left hand
@@ -211,6 +209,17 @@ namespace CaveExplorer
         public void TogglePlayerHandCanvas(bool state)
         {
             playerHandCanvas.SetActive(state);
+        }
+
+        /// <summary>
+        /// Toggles controllers on/off
+        /// </summary>
+        /// <param name="_leftState"></param>
+        /// <param name="_rightState"></param>
+        public void ToggleControllers(bool _leftState, bool _rightState)
+        {
+            leftHandPresence.showController = _leftState;
+            rightHandPresence.showController = _rightState;
         }
 
         /// <summary>
