@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CaveExplorer
 {
@@ -9,8 +10,12 @@ namespace CaveExplorer
         [SerializeField] private AudioClip radioStaticSFX;
         [SerializeField] private AudioClip radioOffSFX;
 
+        [SerializeField] private List<Image> batteryBars; 
+
         private Animator animator;
         private AudioSource audioSource;
+
+        private int currentBatteryLevel = 3;
 
         // Start is called before the first frame update
         void Start()
@@ -45,6 +50,36 @@ namespace CaveExplorer
             if(audioSource == null) audioSource = GetComponent<AudioSource>();
             audioSource.clip = _clip;
             audioSource.Play();
+        }
+
+        public void UpdateBatteryLevel(float _batteryPercentage)
+        {
+            if (_batteryPercentage <= 0)
+                DisplayBatteryLevel(0);
+            else if(_batteryPercentage <= 33)
+                DisplayBatteryLevel(1);
+            else if(_batteryPercentage <= 66)
+                DisplayBatteryLevel(2);
+            else if(_batteryPercentage > 66)
+                DisplayBatteryLevel(3);
+
+        }
+
+        private void DisplayBatteryLevel(int _batteryLevel)
+        {
+            if(currentBatteryLevel == _batteryLevel) return;
+            currentBatteryLevel = _batteryLevel;
+            for(int i = 0; i < batteryBars.Count; i++)
+            {
+                if(i < _batteryLevel)
+                {
+                    batteryBars[i].enabled = true;
+                }
+                else
+                {
+                    batteryBars[i].enabled = false;
+                }
+            }
         }
     }
 }

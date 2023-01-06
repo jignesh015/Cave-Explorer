@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -25,6 +26,7 @@ namespace CaveExplorer
         [SerializeField] private float postExposureFadeToBlack;
 
         [Header("SFX")]
+        [SerializeField] private AudioMixerGroup audioDistortionMixer;
         [SerializeField] private AudioClip enterCaveSFX;
 
         [Header("SCRIPT REFERENCES")]
@@ -129,7 +131,7 @@ namespace CaveExplorer
             //Load the fisrt cave environment
             LoadCaveEnvironment(envController.caveLevel);
 
-            //Switch off network players
+            //Hide network players
             ToggleNetworkPlayers(false);
         }
 
@@ -177,6 +179,9 @@ namespace CaveExplorer
             foreach(NetworkPlayer _np in _networkPlayers)
             {
                 _np.transform.localScale = _state ? Vector3.one : Vector3.zero;
+
+                //Set distortion audio mixer
+                _np.SetAudioMixer(audioDistortionMixer);
             }
         }
 

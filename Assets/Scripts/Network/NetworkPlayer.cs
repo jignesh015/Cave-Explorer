@@ -6,6 +6,7 @@ using Unity.XR.CoreUtils;
 using UnityEngine.XR;
 using UnityEngine.Video;
 using TMPro;
+using UnityEngine.Audio;
 
 namespace CaveExplorer
 {
@@ -24,6 +25,9 @@ namespace CaveExplorer
         [SerializeField] private Animator playerCanvasAnim;
         [SerializeField] private Animator leftHandAnimator;
         [SerializeField] private Animator rightHandAnimator;
+
+        [Header("AUDIO SOURCE")]
+        [SerializeField] private AudioSource networkPlayerAudioSource;
 
         private PhotonView photonView;
 
@@ -104,6 +108,11 @@ namespace CaveExplorer
         {
             target.position = rigTransform.position;
             target.rotation = rigTransform.rotation;
+        }
+
+        public void SetAudioMixer(AudioMixerGroup _audioMixer = null)
+        {
+            networkPlayerAudioSource.outputAudioMixerGroup = _audioMixer;
         }
     }
 }

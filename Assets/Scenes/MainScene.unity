@@ -1225,6 +1225,8 @@ MonoBehaviour:
   currentOxygenTimer: 0
   playerHandCanvas: {fileID: 1333302994}
   oxygenTimerDisplay: {fileID: 1507544454}
+  maxRadioBatteryTimer: 60
+  currentRadioBatteryTimer: 0
   footstepTeleportSFX: {fileID: 8300000, guid: dd8653edb37d59941919e7bd7c5e369c, type: 3}
   speakerAmp: 0
 --- !u!82 &598000446
@@ -1553,6 +1555,8 @@ MonoBehaviour:
   ppv: {fileID: 832575518}
   postExposureDefault: 0
   postExposureFadeToBlack: -15
+  audioDistortionMixer: {fileID: 24300002, guid: e503649a05ff23c4eb1430a537f8524b,
+    type: 2}
   enterCaveSFX: {fileID: 8300000, guid: 961ad48a12a89804f9b3bccecc486b2f, type: 3}
   envController: {fileID: 0}
   playerController: {fileID: 0}
@@ -3168,6 +3172,78 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1344209440}
     m_Modifications:
+    - target: {fileID: 212956473, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212956473, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212956473, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212956473, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212956473, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212956473, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426891570, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426891570, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426891570, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426891570, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426891570, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426891570, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755690243, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755690243, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755690243, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755690243, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755690243, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1755690243, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2712865143184483778, guid: 1ad550fcecf841f4d90f06649d80db54,
         type: 3}
       propertyPath: m_RootOrder
@@ -3227,11 +3303,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Walkie-Talkie
-      objectReference: {fileID: 0}
-    - target: {fileID: 3381597308687531896, guid: 1ad550fcecf841f4d90f06649d80db54,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ad550fcecf841f4d90f06649d80db54, type: 3}

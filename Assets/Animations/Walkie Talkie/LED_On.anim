@@ -42,7 +42,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.r
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -70,7 +70,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.g
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -98,7 +98,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.b
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -126,7 +126,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.a
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -138,28 +138,28 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 166846581
+      path: 2468163927
       attribute: 1218664834
       script: {fileID: 0}
       typeID: 23
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 166846581
+      path: 2468163927
       attribute: 1487100290
       script: {fileID: 0}
       typeID: 23
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 166846581
+      path: 2468163927
       attribute: 1755535746
       script: {fileID: 0}
       typeID: 23
       customType: 22
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 166846581
+      path: 2468163927
       attribute: 2023971202
       script: {fileID: 0}
       typeID: 23
@@ -212,7 +212,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.r
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -240,7 +240,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.g
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -268,7 +268,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.b
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   - curve:
@@ -296,7 +296,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._EmissionColor.a
-    path: Cylinder.001
+    path: Walkie Talkie
     classID: 23
     script: {fileID: 0}
   m_EulerEditorCurves: []

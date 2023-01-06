@@ -34,6 +34,10 @@ namespace CaveExplorer
         [SerializeField] private GameObject playerHandCanvas;
         [SerializeField] private TextMeshProUGUI oxygenTimerDisplay;
 
+        [Header("WALKIE TALKIE BATTERY LEVEL")]
+        [SerializeField] private float maxRadioBatteryTimer;
+        [SerializeField] private float currentRadioBatteryTimer;
+
         [Header("SFX")]
         [SerializeField] private AudioClip footstepTeleportSFX;
 
@@ -55,7 +59,7 @@ namespace CaveExplorer
         void Update()
         {
             //Enable/Disable voice chat based on user input 
-            if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
+            if (isInGame && InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
             {
                 bool triggerValue;
                 if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out triggerValue) && triggerValue)
@@ -94,6 +98,20 @@ namespace CaveExplorer
                     //TODO: GAME OVER LOGIC
                 }
 
+            }
+
+            //Start decreasing walkie-talkie battery level when player is talking
+            if(isInGame && recorder != null && recorder.TransmitEnabled)
+            {
+                currentRadioBatteryTimer -= Time.deltaTime;
+                walkieTalkie.UpdateBatteryLevel(currentRadioBatteryTimer * 100f / maxRadioBatteryTimer);
+                if(currentRadioBatteryTimer <= 0)
+                {
+                    isInGame = false;
+                    DisableVoiceChat();
+
+                    //TODO: GAME OVER LOGIC
+                }
             }
         }
 
@@ -137,8 +155,11 @@ namespace CaveExplorer
         public void SetPlayerVariablesForGame()
         {
             isInGame = true;
-            currentOxygenTimer = maxOxygenTimer;
 
+            if(currentOxygenTimer == 0) currentOxygenTimer = maxOxygenTimer;
+            if (currentRadioBatteryTimer == 0) currentRadioBatteryTimer = maxRadioBatteryTimer;
+
+            DisableVoiceChat();
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
             ToggleWalkieTalkie(true);
@@ -155,6 +176,7 @@ namespace CaveExplorer
             isInGame = false;
             recorder.TransmitEnabled = false;
 
+            EnableVoiceChat();
             SetReticleScale(1);
             ToggleHeadMountedLight(false);
             ToggleWalkieTalkie(false);
@@ -234,7 +256,7 @@ namespace CaveExplorer
         public void OnTeleport()
         {
             //Play footstep SFX
-            PlaySFX(footstepTeleportSFX, 0.5f);
+            PlaySFX(footstepTeleportSFX, 0.75f);
         }
 
         public void PlaySFX(AudioClip _clip, float _volume = 1)
