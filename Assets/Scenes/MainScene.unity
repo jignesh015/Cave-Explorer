@@ -1537,7 +1537,7 @@ MonoBehaviour:
   currentOxygenTimer: 0
   playerHandCanvas: {fileID: 1333302994}
   oxygenTimerDisplay: {fileID: 1507544454}
-  maxRadioBatteryTimer: 60
+  maxRadioBatteryTimer: 300
   currentRadioBatteryTimer: 0
   footstepTeleportSFX: {fileID: 8300000, guid: dd8653edb37d59941919e7bd7c5e369c, type: 3}
   speakerAmp: 0
@@ -2002,7 +2002,7 @@ MonoBehaviour:
   OnVoiceChatDisabled:
     m_PersistentCalls:
       m_Calls: []
-  enableSinglePlayerMode: 1
+  enableSinglePlayerMode: 0
 --- !u!4 &752265541
 Transform:
   m_ObjectHideFlags: 0
