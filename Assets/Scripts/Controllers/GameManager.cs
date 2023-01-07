@@ -1,3 +1,7 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +19,7 @@ namespace CaveExplorer
         [Header("PUBLIC BOOL")]
         [HideInInspector] public bool isPlayer1;
         [HideInInspector] public bool isConnectedToServer;
+        [HideInInspector] public bool hasCompletedOnboarding;
 
         [Header("PLAYER SPAWN POINTS")]
         [SerializeField] private Transform player1SpawnPoint;
@@ -32,6 +37,8 @@ namespace CaveExplorer
         [Header("SCRIPT REFERENCES")]
         [HideInInspector] public EnvironmentController envController;
         [HideInInspector] public PlayerController playerController;
+        [HideInInspector] public OnboardingController onboardingController;
+        [HideInInspector] public BackgroundSoundController bgmController;
 
         [Header("NETWORK EVENTS")]
         public UnityEvent OnConnectedToServer;
@@ -42,10 +49,17 @@ namespace CaveExplorer
         [Header("UI EVENTS")]
         public UnityEvent OnLobbyStartPressed;
 
+        [Header("GAME EVENTS")]
+        public UnityEvent OnPlayerTeleport;
+        public UnityEvent OnVoiceChatEnabled;
+        public UnityEvent OnVoiceChatDisabled;
+
         [Header("DEBUG ONLY")]
         public bool enableSinglePlayerMode;
 
         private ColorAdjustments colorAdjustments;
+        private bool remotePlayerPressedStart;
+        private bool remotePlayerStatus;
 
         public static GameManager Instance { get; private set; }
 
@@ -68,13 +82,26 @@ namespace CaveExplorer
             //Get script references
             envController = FindObjectOfType<EnvironmentController>();
             playerController = FindObjectOfType<PlayerController>();
+            onboardingController= FindObjectOfType<OnboardingController>();
+            bgmController = FindObjectOfType<BackgroundSoundController>();
 
             //Add delegate
+            OnJoinedRoom.AddListener(EnterLobby);
             OnLobbyStartPressed.AddListener(StartGame);
             OnConnectedToServer.AddListener(ConnectedToServer);
 
             //Populate PPV reference
             ppv.profile.TryGet(out colorAdjustments);
+        }
+
+        private void OnEnable()
+        {
+            PhotonNetwork.NetworkingClient.EventReceived += OnCustomEvent;
+        }
+
+        private void OnDisable()
+        {
+            PhotonNetwork.NetworkingClient.EventReceived -= OnCustomEvent;
         }
 
         // Update is called once per frame
@@ -98,8 +125,37 @@ namespace CaveExplorer
         public void InitializePlayer(bool _isPlayer1)
         {
             isPlayer1 = _isPlayer1;
-            playerController.SetPlayerPos(isPlayer1 ? 
+            playerController.SetPlayerPos(isPlayer1 ?
                 player1SpawnPoint.position : player2SpawnPoint.position);
+        }
+
+        /// <summary>
+        /// Loads the lobby environment
+        /// </summary>
+        public void EnterLobby()
+        {
+            //Load Cave Environment
+            envController.LoadEnvironment(envController.lobbyEnv, OnLobbyEnvLoaded, true);
+        }
+
+        /// <summary>
+        /// Is called when the lobby environment is loaded 
+        /// </summary>
+        private void OnLobbyEnvLoaded()
+        {
+            //Set player variables
+            playerController.SetPlayerVariablesForLobby();
+
+            //Fade to normal
+            FadeToNormal();
+
+            //If player hasn't completed onboarding, play the scenario
+            if(!hasCompletedOnboarding)
+                onboardingController.PlayOnboardingScenrio(OnboardingScenario.WelcomeToLobby);
+
+            //Call the remote start event if available
+            if (remotePlayerPressedStart)
+                FindObjectOfType<LobbyUIController>().StartGame(remotePlayerStatus);
         }
 
         /// <summary>
@@ -123,7 +179,7 @@ namespace CaveExplorer
             //Fade to black
             FadeToBlack();
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.2f);
 
             //Increment cave level
             envController.caveLevel++;
@@ -145,7 +201,7 @@ namespace CaveExplorer
             //Load cave environment for respective player
             Environment _envToLoad = isPlayer1 ? envController.player1CaveEnvList[_caveIndex]
                 : envController.player2CaveEnvList[_caveIndex];
-            envController.LoadEnvironment(_envToLoad, OnNewEnvLoaded, true);
+            envController.LoadEnvironment(_envToLoad, OnCaveEnvLoaded, true);
 
             //Place player in their starting position
             playerController.SetPlayerPos(_envToLoad.playerSpawnPos);
@@ -160,13 +216,20 @@ namespace CaveExplorer
         /// <summary>
         /// Is called when a new environment is done loading
         /// </summary>
-        public void OnNewEnvLoaded()
+        public void OnCaveEnvLoaded()
         {
             //Set player variables
             playerController.SetPlayerVariablesForGame();
 
             //Fade to normal
             FadeToNormal();
+
+            //Fade-in BGM
+            bgmController.LerpBGMVolume(0.05f, 1);
+
+            //If player hasn't completed onboarding, play the scenario
+            if (!hasCompletedOnboarding)
+                onboardingController.PlayOnboardingScenrio(OnboardingScenario.RightTriggerToTeleport);
         }
 
         /// <summary>
@@ -216,6 +279,44 @@ namespace CaveExplorer
                 yield return null;
             }
             colorAdjustments.postExposure.Override(_endValue);
+        }
+
+        /// <summary>
+        /// Raises a custom Photon event using the given parameters
+        /// </summary>
+        public void RaiseCustomEvent(byte _eventCode, object[] _content)
+        {
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All, CachingOption = EventCaching.AddToRoomCache };
+            PhotonNetwork.RaiseEvent(_eventCode, _content, raiseEventOptions, SendOptions.SendReliable);
+        }
+
+        /// <summary>
+        /// This function receives the custom RPC events sent by any player
+        /// </summary>
+        /// <param name="photonEvent"></param>
+        public void OnCustomEvent(EventData photonEvent)
+        {
+            byte eventCode = photonEvent.Code;
+            if (eventCode == StaticData.StartGameEventCode)
+            {
+                //Extract data from custom event object
+                object[] _content = (object[])photonEvent.CustomData;
+                bool _isPlayer1 = (bool)_content[0];
+                if(FindObjectOfType<LobbyUIController>() != null)
+                {
+                    //Lobby is already loaded, call the start method
+                    FindObjectOfType<LobbyUIController>().StartGame(_isPlayer1);
+                }
+                else
+                {
+                    //Cache the event for later
+                    if (isPlayer1 != _isPlayer1)
+                    {
+                        remotePlayerPressedStart = true;
+                        remotePlayerStatus = _isPlayer1;
+                    }
+                }
+            }
         }
     }
 }

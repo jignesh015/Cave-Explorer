@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 namespace CaveExplorer
 {
@@ -21,14 +23,14 @@ namespace CaveExplorer
         [Header("SFX")]
         [SerializeField] private AudioClip buttonPressedSFX;
 
-        private PhotonView photonView;
+        //private PhotonView photonView;
         private GameManager gameManager;
         private AudioSource lobbyUIAudio;
 
         // Start is called before the first frame update
         void Start()
         {
-            photonView = PhotonView.Get(this);
+            //photonView = PhotonView.Get(this);
             gameManager = GameManager.Instance;
             lobbyUIAudio = GetComponent<AudioSource>();
 
@@ -40,8 +42,14 @@ namespace CaveExplorer
             connectedToServerPanel.SetActive(gameManager.isConnectedToServer);
         }
 
+        //private void OnEnable()
+        //{
+        //    PhotonNetwork.NetworkingClient.EventReceived += OnCustomEvent;
+        //}
+
         private void OnDisable()
         {
+            //PhotonNetwork.NetworkingClient.EventReceived -= OnCustomEvent;
             gameManager.OnConnectedToServer.RemoveListener(ConnectedToServer);
         }
 
@@ -57,7 +65,10 @@ namespace CaveExplorer
         public void OnStartPressed()
         {
             Debug.Log("CONFIRM PRESSEED");
-            photonView.RPC(nameof(StartGame), RpcTarget.AllBufferedViaServer, gameManager.isPlayer1);
+            //photonView.RPC(nameof(StartGame), RpcTarget.AllBufferedViaServer, gameManager.isPlayer1);
+
+            //Raise Photon Event for Start button pressed
+            gameManager.RaiseCustomEvent(StaticData.StartGameEventCode, new object[] { gameManager.isPlayer1 });
         }
 
         //public void OnSwapPressed()
@@ -73,27 +84,22 @@ namespace CaveExplorer
             lobbyUIAudio.Play();
         }
 
-        //[PunRPC]
-        //private void SetPlayerRoles(bool _player1IsGuide)
+        /// <summary>
+        /// This function receives the custom RPC events sent by any player
+        /// </summary>
+        /// <param name="photonEvent"></param>
+        //public void OnCustomEvent(EventData photonEvent)
         //{
-        //    gameManager.player1IsGuide = _player1IsGuide;
-
-        //    //Set Role UI for Player 1
-        //    player1Guide.SetActive(_player1IsGuide);
-        //    player1Explorer.SetActive(!_player1IsGuide);
-
-        //    //Set Role UI for Player 2
-        //    player2Guide.SetActive(!_player1IsGuide);
-        //    player2Explorer.SetActive(_player1IsGuide);
-
-        //    //Play Button Pressed SFX
-        //    PlaySFX(buttonPressedSFX);
+        //    byte eventCode = photonEvent.Code;
+        //    if (eventCode == StaticData.StartGameEventCode)
+        //        StartGame((object[])photonEvent.CustomData);
         //}
 
-        [PunRPC]
-        private void StartGame(bool _isPlayer1)
+        public void StartGame(bool _isPlayer1)
         {
-            if(_isPlayer1)
+            //Extract data from custom event object
+            //bool _isPlayer1 = (bool)_content[0];
+            if (_isPlayer1)
             {
                 player1ReadyText.SetActive(true);
             }
@@ -103,13 +109,13 @@ namespace CaveExplorer
             }
 
             //Disable Start button once pressed
-            if((_isPlayer1 && gameManager.isPlayer1) || (!_isPlayer1 && !gameManager.isPlayer1))
+            if ((_isPlayer1 && gameManager.isPlayer1) || (!_isPlayer1 && !gameManager.isPlayer1))
             {
                 startButton.interactable = false;
             }
 
             //If both player are ready, start the game
-            if((player1ReadyText.activeSelf && player2ReadyText.activeSelf) ||
+            if ((player1ReadyText.activeSelf && player2ReadyText.activeSelf) ||
                 gameManager.enableSinglePlayerMode)
             {
                 //Hide Lobby Canvas
@@ -122,6 +128,39 @@ namespace CaveExplorer
                 gameManager.OnLobbyStartPressed?.Invoke();
             }
         }
+
+        //[PunRPC]
+        //private void StartGame(bool _isPlayer1)
+        //{
+        //    if(_isPlayer1)
+        //    {
+        //        player1ReadyText.SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        player2ReadyText.SetActive(true);
+        //    }
+
+        //    //Disable Start button once pressed
+        //    if((_isPlayer1 && gameManager.isPlayer1) || (!_isPlayer1 && !gameManager.isPlayer1))
+        //    {
+        //        startButton.interactable = false;
+        //    }
+
+        //    //If both player are ready, start the game
+        //    if((player1ReadyText.activeSelf && player2ReadyText.activeSelf) ||
+        //        gameManager.enableSinglePlayerMode)
+        //    {
+        //        //Hide Lobby Canvas
+        //        lobbyCanvas.transform.localScale = Vector3.zero;
+
+        //        //Play Button Pressed SFX
+        //        PlaySFX(buttonPressedSFX);
+
+        //        //Invoke Lobby Confirmed delegate
+        //        gameManager.OnLobbyStartPressed?.Invoke();
+        //    }
+        //}
     }
 }
 

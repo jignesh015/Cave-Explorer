@@ -41,9 +41,12 @@ namespace CaveExplorer
         [SerializeField] private GameObject oxygenLevelIndicator;
         [SerializeField] private GameObject radioBatteryIndicator;
 
+        private OnboardingScenario currentScenario;
+
         private AudioSource audioSource;
         private GameManager gameManager;
         private PlayerController playerController;
+        private LandingUIController landingUIController;
 
         // Start is called before the first frame update
         void Start()
@@ -51,6 +54,10 @@ namespace CaveExplorer
             audioSource = GetComponent<AudioSource>();
             gameManager = GameManager.Instance;
             playerController = GameManager.Instance.playerController;
+
+            //Add listeners
+            gameManager.OnPlayerTeleport.AddListener(OnPlayerTeleport);
+            gameManager.OnVoiceChatEnabled.AddListener(OnVoiceChatEnabled);
 
             StartOnboarding();
         }
@@ -84,8 +91,49 @@ namespace CaveExplorer
         
         }
 
+        private void OnPlayerTeleport()
+        {
+            //If player has teleported, play the next scenario
+            if (currentScenario == OnboardingScenario.RightTriggerToTeleport)
+                StartCoroutine(OnPlayerTeleportAsync());
+        }
+
+        private IEnumerator OnPlayerTeleportAsync()
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (currentScenario == OnboardingScenario.RightTriggerToTeleport)
+                PlayOnboardingScenrio(OnboardingScenario.LeftTriggerToCommunicate);
+        }
+
+        private void OnVoiceChatEnabled()
+        {
+            //If player enabled voice chat, play the next scenario
+            if (currentScenario == OnboardingScenario.LeftTriggerToCommunicate)
+                StartCoroutine(OnVoiceChatEnabledAsync());
+        }
+
+        private IEnumerator OnVoiceChatEnabledAsync()
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            if (currentScenario == OnboardingScenario.LeftTriggerToCommunicate)
+                PlayOnboardingScenrio(OnboardingScenario.BeMindfulOfOxygenLevel);
+
+            yield return new WaitForSeconds(beMindfulOfOxygenLevel.length + 5f);
+
+            PlayOnboardingScenrio(OnboardingScenario.CooperateWithEachOther);
+
+            yield return new WaitForSeconds(cooperateWithEachOther.length + 1f);
+
+            PlayOnboardingScenrio(OnboardingScenario.AllTheBest);
+
+        }
+
         public void PlayOnboardingScenrio(OnboardingScenario _scenario)
         {
+            if (currentScenario == _scenario) return;
+            currentScenario = _scenario;
             HideAllTextOverlays();
             StopOnboardingAudio();
             playerController.ToggleControllers(false, false);
@@ -98,9 +146,10 @@ namespace CaveExplorer
                     PlayOnboardingAudio(welcomeExplorer);
                     break;
                 case OnboardingScenario.EnterLobby:
+                    if(FindObjectOfType<LandingUIController>() != null)
+                        FindObjectOfType<LandingUIController>().PlayUIAnimation("ShowStart");
                     pressRightTriggerToSelectIndicator.SetActive(true);
                     PlayOnboardingAudio(enterLobby);
-                    //Show controllers
                     playerController.ToggleControllers(true, true);
                     break;
                 case OnboardingScenario.WelcomeToLobby:
@@ -108,12 +157,20 @@ namespace CaveExplorer
                     break;
                 case OnboardingScenario.RightTriggerToTeleport:
                     PlayOnboardingAudio(rightTriggerToTeleport);
+                    playerController.ToggleControllers(false, true);
+                    pressRightTriggerToTeleportIndicator.SetActive(true);
                     break;
                     case OnboardingScenario.LeftTriggerToCommunicate:
-                    PlayOnboardingAudio(leftTriggerToCommunicate); 
+                    PlayOnboardingAudio(leftTriggerToCommunicate);
+                    playerController.ToggleControllers(true, false);
+                    pressLeftTriggerToCommunicateIndicator.SetActive(true);
                     break;
                 case OnboardingScenario.BeMindfulOfOxygenLevel:
                     PlayOnboardingAudio(beMindfulOfOxygenLevel);
+                    oxygenLevelIndicator.SetActive(true);
+                    radioBatteryIndicator.SetActive(true);
+                    playerController.TogglePlayerHandCanvas(true);
+                    playerController.ToggleWalkieTalkie(true);
                     break;
                 case OnboardingScenario.CooperateWithEachOther:
                     PlayOnboardingAudio(cooperateWithEachOther); 

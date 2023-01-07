@@ -12,10 +12,10 @@ namespace CaveExplorer
         // Start is called before the first frame update
         void Start()
         {
-            ConnectToServer();
+            //ConnectToServer();
         }
 
-        private void ConnectToServer()
+        public void ConnectToServer()
         {
             PhotonNetwork.ConnectUsingSettings();
             Debug.Log("<color=yellow>Try connecting to a server...</color>");

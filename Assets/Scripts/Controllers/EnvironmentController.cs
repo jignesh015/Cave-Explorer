@@ -13,6 +13,7 @@ namespace CaveExplorer
 
         [Header("ENVIRONMENTS")]
         [SerializeField] private string envNamePrefix;
+        public Environment landingEnv;
         public Environment lobbyEnv;
         public List<Environment> player1CaveEnvList;
         public List<Environment> player2CaveEnvList;
@@ -22,7 +23,7 @@ namespace CaveExplorer
         // Start is called before the first frame update
         void Start()
         {
-            currentlyLoadedEnvironment = lobbyEnv;
+            currentlyLoadedEnvironment = landingEnv;
         }
 
         // Update is called once per frame
@@ -57,8 +58,12 @@ namespace CaveExplorer
             _environmentObj.transform.position = _env.environmentSpawnPos;
             _environmentObj.transform.rotation = _env.environmentSpawnRot;
 
-            //Adjust fog density for the new environment
+            //Adjust fog density  and color for the new environment
             RenderSettings.fogDensity = _env.fogDensity;
+            RenderSettings.fogColor = _env.fogColor;
+
+            //Set skybox
+            RenderSettings.skybox = _env.skybox;
 
             yield return new WaitForEndOfFrame();
 
@@ -105,5 +110,7 @@ namespace CaveExplorer
         public Vector3 playerSpawnPos;
         public Quaternion playerSpawnRot;
         public float fogDensity;
+        public Color fogColor;
+        public Material skybox;
     }
 }

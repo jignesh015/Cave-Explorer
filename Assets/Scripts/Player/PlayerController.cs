@@ -52,7 +52,9 @@ namespace CaveExplorer
         {
             recorder = FindObjectOfType<Recorder>();
             playerAudioSource = GetComponent<AudioSource>();
-            SetPlayerVariablesForLobby();
+            SetPlayerVariablesAtStart();
+
+            GameManager.Instance.OnPlayerTeleport.AddListener(OnTeleport);
         }
 
         // Update is called once per frame
@@ -134,6 +136,7 @@ namespace CaveExplorer
             {
                 recorder.TransmitEnabled = true;
                 walkieTalkie.ToggleWalkieTalkieLED(true);
+                GameManager.Instance.OnVoiceChatEnabled?.Invoke();
             }
         }
 
@@ -146,6 +149,7 @@ namespace CaveExplorer
             {
                 recorder.TransmitEnabled = false;
                 walkieTalkie.ToggleWalkieTalkieLED(false);
+                GameManager.Instance.OnVoiceChatDisabled?.Invoke();
             }
         }
 
@@ -182,6 +186,18 @@ namespace CaveExplorer
             ToggleXRDirectInteractor(true);
 
             leftHandPresence.suspendHandAnimation = false;
+        }
+
+        public void SetPlayerVariablesAtStart()
+        {
+            isInGame = false;
+            recorder.TransmitEnabled = false;
+
+            SetReticleScale(1);
+            ToggleHeadMountedLight(false);
+            ToggleWalkieTalkie(false);
+            TogglePlayerHandCanvas(false);
+            ToggleXRDirectInteractor(true);
         }
 
         /// <summary>

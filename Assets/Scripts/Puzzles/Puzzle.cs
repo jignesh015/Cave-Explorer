@@ -30,7 +30,7 @@ namespace CaveExplorer
         /// </summary>
         public virtual void OnPlayerTeleport()
         {
-            GameManager.Instance.playerController.OnTeleport();
+            GameManager.Instance.OnPlayerTeleport?.Invoke();
         }
 
         /// <summary>
