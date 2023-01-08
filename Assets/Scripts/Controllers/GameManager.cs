@@ -321,7 +321,7 @@ namespace CaveExplorer
             else if (eventCode == StaticData.GameCompleteEventCode)
                 playerController.ToggleGameUI(3);
             else if (eventCode == StaticData.ExitToLobbyEventCode)
-                EnterLobby();
+                Invoke(nameof(EnterLobby), 1f);
         }
 
         /// <summary>

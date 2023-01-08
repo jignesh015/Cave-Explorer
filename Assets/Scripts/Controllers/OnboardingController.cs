@@ -122,7 +122,7 @@ namespace CaveExplorer
             if (currentScenario == OnboardingScenario.LeftTriggerToCommunicate)
                 PlayOnboardingScenrio(OnboardingScenario.BeMindfulOfOxygenLevel);
 
-            yield return new WaitForSeconds(beMindfulOfOxygenLevel.length + 5f);
+            yield return new WaitForSeconds(beMindfulOfOxygenLevel.length + 2.5f);
 
             PlayOnboardingScenrio(OnboardingScenario.CooperateWithEachOther);
 
@@ -166,7 +166,7 @@ namespace CaveExplorer
                         FindObjectOfType<LandingUIController>().PlayUIAnimation("ShowStart");
                     pressRightTriggerToSelectIndicator.SetActive(true);
                     PlayOnboardingAudio(enterLobby);
-                    playerController.ToggleControllers(true, true);
+                    playerController.ToggleControllers(false, true);
                     break;
                 case OnboardingScenario.WelcomeToLobby:
                     PlayOnboardingAudio(welcomeToLobby);

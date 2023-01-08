@@ -1804,6 +1804,7 @@ GameObject:
   - component: {fileID: 426138296}
   - component: {fileID: 426138298}
   - component: {fileID: 426138297}
+  - component: {fileID: 426138299}
   m_Layer: 5
   m_Name: Out of Oxygen
   m_TagString: Untagged
@@ -1821,7 +1822,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1590782007}
   - {fileID: 70210700}
@@ -1872,6 +1873,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 426138295}
   m_CullTransparentMesh: 1
+--- !u!95 &426138299
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426138295}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 151adb729b86e63499da90b2761fb0e2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &446030844 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5991220331983071286, guid: 8d1bff3c2344a0b47bdd39701c403858,
@@ -2148,6 +2169,8 @@ MonoBehaviour:
   walkieTalkie: {fileID: 2112301879}
   leftHandPresence: {fileID: 1213974545}
   rightHandPresence: {fileID: 1319034157}
+  leftBaseController: {fileID: 1344209444}
+  rightBaseController: {fileID: 91607654}
   rightDirectInteractor: {fileID: 823178421}
   reticle: {fileID: 1961928827}
   reticleScale:
@@ -2164,6 +2187,10 @@ MonoBehaviour:
   ranOutOfBatteryUI: {fileID: 2007235206}
   gameCompleteUI: {fileID: 1367542501}
   footstepTeleportSFX: {fileID: 8300000, guid: dd8653edb37d59941919e7bd7c5e369c, type: 3}
+  gameCompleteSFX: {fileID: 8300000, guid: a6ac65cc257091944b62f4d83943ff54, type: 3}
+  gameOverSFX: {fileID: 8300000, guid: d1f2a076aee81a34b9d7db72a31f2385, type: 3}
+  hapticIntensity: 0.7
+  hapticDuration: 1
   speakerAmp: 0
 --- !u!82 &598000446
 AudioSource:
@@ -4075,9 +4102,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Thanks for playing the game.
-
-    Hope you enjoyed it!'
+  m_text: You managed to escape the cave on time!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4568,6 +4593,7 @@ GameObject:
   - component: {fileID: 1022482221}
   - component: {fileID: 1022482224}
   - component: {fileID: 1022482223}
+  - component: {fileID: 1022482225}
   m_Layer: 5
   m_Name: Game Menu
   m_TagString: Untagged
@@ -4585,7 +4611,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 735153618}
   - {fileID: 1016682570}
@@ -4635,6 +4661,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022482220}
   m_CullTransparentMesh: 1
+--- !u!95 &1022482225
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022482220}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ba3c88f4a3c56bd48b5b11f579198804, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1088370774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5619,6 +5665,7 @@ GameObject:
   - component: {fileID: 1367542502}
   - component: {fileID: 1367542504}
   - component: {fileID: 1367542503}
+  - component: {fileID: 1367542505}
   m_Layer: 5
   m_Name: Game Complete
   m_TagString: Untagged
@@ -5636,7 +5683,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1605657407}
   - {fileID: 991894441}
@@ -5687,6 +5734,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367542501}
   m_CullTransparentMesh: 1
+--- !u!95 &1367542505
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367542501}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2db0534746f69c745b675577a36304f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1370141909
 GameObject:
   m_ObjectHideFlags: 0
@@ -6298,18 +6365,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507544452}
   m_CullTransparentMesh: 1
---- !u!114 &1509871352 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1871053731047841078, guid: 5c265b864cbee854287e91ce8afc554a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1871053732531688398}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5da905dd0978bd047aab46ef847e938d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1540365029
 GameObject:
   m_ObjectHideFlags: 0
@@ -7551,6 +7606,7 @@ GameObject:
   - component: {fileID: 2007235207}
   - component: {fileID: 2007235209}
   - component: {fileID: 2007235208}
+  - component: {fileID: 2007235210}
   m_Layer: 5
   m_Name: Out of Battery
   m_TagString: Untagged
@@ -7568,7 +7624,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1738298951}
   - {fileID: 998332275}
@@ -7619,6 +7675,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2007235206}
   m_CullTransparentMesh: 1
+--- !u!95 &2007235210
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007235206}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 89f1b0925e272754e97361d5375f90a4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2032491696
 GameObject:
   m_ObjectHideFlags: 0
@@ -8120,35 +8196,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 988204739}
     m_Modifications:
-    - target: {fileID: 1871053731047841086, guid: 5c265b864cbee854287e91ce8afc554a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871053731356473143, guid: 5c265b864cbee854287e91ce8afc554a,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1509871352}
-    - target: {fileID: 1871053731356473143, guid: 5c265b864cbee854287e91ce8afc554a,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnStartButtonPressed
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871053731356473143, guid: 5c265b864cbee854287e91ce8afc554a,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CaveExplorer.LandingUIController, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 1871053731870345286, guid: 5c265b864cbee854287e91ce8afc554a,
         type: 3}
       propertyPath: m_Name
       value: Landing_Environment
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871053731870345286, guid: 5c265b864cbee854287e91ce8afc554a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1871053731870345287, guid: 5c265b864cbee854287e91ce8afc554a,
         type: 3}

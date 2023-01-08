@@ -21,6 +21,8 @@ namespace CaveExplorer
         [Header("PLAYER HANDS")]
         [SerializeField] private HandPresence leftHandPresence;
         [SerializeField] private HandPresence rightHandPresence;
+        [SerializeField] private XRBaseController leftBaseController;
+        [SerializeField] private XRBaseController rightBaseController;
         [SerializeField] private XRDirectInteractor rightDirectInteractor;
 
         [Header("RETICLE")]
@@ -46,6 +48,12 @@ namespace CaveExplorer
 
         [Header("SFX")]
         [SerializeField] private AudioClip footstepTeleportSFX;
+        [SerializeField] private AudioClip gameCompleteSFX;
+        [SerializeField] private AudioClip gameOverSFX;
+
+        [Header("HAPTIC FEEDBACK")]
+        [SerializeField] private float hapticIntensity;
+        [SerializeField] private float hapticDuration;
 
         private Recorder recorder;
         [HideInInspector] public float speakerAmp;
@@ -268,6 +276,9 @@ namespace CaveExplorer
         {
             leftHandPresence.showController = _leftState;
             rightHandPresence.showController = _rightState;
+
+            if (_leftState) TriggerHapticFeedback(0, hapticIntensity, hapticDuration);
+            if (_rightState) TriggerHapticFeedback(1, hapticIntensity, hapticDuration);
         }
 
         /// <summary>
@@ -329,6 +340,22 @@ namespace CaveExplorer
             playerAudioSource.Play();
         }
 
+
+        /// <summary>
+        /// Triggers the haptic feedback on the given hand
+        /// | 0 = Left | 1 = Right
+        /// </summary>
+        /// <param name="_handIndex"></param>
+        /// <param name="_intensity"></param>
+        /// <param name="_duration"></param>
+        public void TriggerHapticFeedback(int _handIndex, float _intensity, float _duration)
+        {
+            if(_handIndex == 0)
+                leftBaseController.SendHapticImpulse(_intensity, _duration);
+            else
+                rightBaseController.SendHapticImpulse(_intensity, _duration);
+        }
+
         /// <summary>
         /// Is called when game is over due to running out of resources
         /// | 0 = Oxygen Over | 1 = Battery Over
@@ -373,14 +400,17 @@ namespace CaveExplorer
                     GameManager.Instance.OnGameMenuOpened?.Invoke();
                     break;
                 case 1:
+                    PlaySFX(gameOverSFX);
                     ranOutOfOxygenUI.SetActive(true);
                     GameManager.Instance.envController.HideCurrentEnvironment();
                     break;
                 case 2:
+                    PlaySFX(gameOverSFX);
                     ranOutOfBatteryUI.SetActive(true);
                     GameManager.Instance.envController.HideCurrentEnvironment();
                     break;
                 case 3:
+                    PlaySFX(gameCompleteSFX);
                     gameCompleteUI.SetActive(true);
                     GameManager.Instance.envController.HideCurrentEnvironment();
                     break;
