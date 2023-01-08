@@ -55,6 +55,7 @@ namespace CaveExplorer
         public UnityEvent OnPlayerTeleport;
         public UnityEvent OnVoiceChatEnabled;
         public UnityEvent OnVoiceChatDisabled;
+        public UnityEvent OnGrabButtonPressed;
 
         [Header("DEBUG ONLY")]
         public bool enableSinglePlayerMode;

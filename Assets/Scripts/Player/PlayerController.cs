@@ -61,6 +61,7 @@ namespace CaveExplorer
         private bool isInGame;
         private AudioSource playerAudioSource;
 
+        private bool lastRightGrabState = false;
         private bool lastYButtonState = false;
         private int yButtonPressCount = 1;
 
@@ -117,6 +118,25 @@ namespace CaveExplorer
                         ToggleGameUI(gameMenuUI.activeSelf ? -1 : 0);
                     }
                     yButtonPressCount++;
+                }
+            }
+
+            if(isInGame && InputDevices.GetDeviceAtXRNode(XRNode.RightHand) != null)
+            {
+                bool rightGrabValue;
+                if (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.gripButton, out rightGrabValue) && rightGrabValue)
+                {
+                    //Right Grab is Pressed
+                    if(!lastRightGrabState)
+                    {
+                        lastRightGrabState = true;
+                        GameManager.Instance.OnGrabButtonPressed?.Invoke();
+                    }
+                }
+                else
+                {
+                    //Right Grab is Not Pressed
+                    lastRightGrabState = false;
                 }
             }
 

@@ -16,7 +16,8 @@ namespace CaveExplorer
         BeMindfulOfOxygenLevel,
         CooperateWithEachOther,
         ToggleGameMenu,
-        AllTheBest
+        AllTheBest,
+        GrabToInteract
     }
 
     public class OnboardingController : MonoBehaviour
@@ -44,7 +45,7 @@ namespace CaveExplorer
         [SerializeField] private GameObject radioBatteryIndicator;
         [SerializeField] private GameObject yButtonIndicator;
 
-        private OnboardingScenario currentScenario;
+        [HideInInspector] public OnboardingScenario currentScenario;
 
         private AudioSource audioSource;
         private GameManager gameManager;
@@ -62,6 +63,7 @@ namespace CaveExplorer
             gameManager.OnPlayerTeleport.AddListener(OnPlayerTeleport);
             gameManager.OnVoiceChatEnabled.AddListener(OnVoiceChatEnabled);
             gameManager.OnGameMenuOpened.AddListener(OnGameMenuOpened);
+            gameManager.OnGrabButtonPressed.AddListener(OnGrabPressed);
 
             StartOnboarding();
         }
@@ -93,6 +95,7 @@ namespace CaveExplorer
         
         }
 
+        #region ON TELEPORT
         private void OnPlayerTeleport()
         {
             //If player has teleported, play the next scenario
@@ -107,7 +110,9 @@ namespace CaveExplorer
             if (currentScenario == OnboardingScenario.RightTriggerToTeleport)
                 PlayOnboardingScenrio(OnboardingScenario.LeftTriggerToCommunicate);
         }
+        #endregion
 
+        #region ON VOICE CHAT 
         private void OnVoiceChatEnabled()
         {
             //If player enabled voice chat, play the next scenario
@@ -130,7 +135,9 @@ namespace CaveExplorer
 
             PlayOnboardingScenrio(OnboardingScenario.ToggleGameMenu);
         }
+        #endregion
 
+        #region ON GAME MENU OPEN
         private void OnGameMenuOpened()
         {
             //If player opened game menu, play the next scenario
@@ -145,6 +152,15 @@ namespace CaveExplorer
             if (currentScenario == OnboardingScenario.ToggleGameMenu)
                 PlayOnboardingScenrio(OnboardingScenario.AllTheBest);
         }
+        #endregion
+
+        #region ON GRAB PRESS
+        private void OnGrabPressed()
+        {
+            if (currentScenario == OnboardingScenario.GrabToInteract)
+                PlayOnboardingScenrio(OnboardingScenario.None);
+        }
+        #endregion
 
         public void PlayOnboardingScenrio(OnboardingScenario _scenario)
         {
@@ -205,6 +221,10 @@ namespace CaveExplorer
                     playerController.TogglePlayerHandCanvas(true);
                     playerController.ToggleWalkieTalkie(true);
                     gameManager.hasCompletedOnboarding = true;
+                    break;
+                case OnboardingScenario.GrabToInteract:
+                    pressRightGrabToInteractIndicator.SetActive(true);
+                    playerController.ToggleControllers(false, true);
                     break;
                 default:
                     break;

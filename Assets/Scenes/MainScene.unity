@@ -1955,7 +1955,7 @@ GameObject:
   - component: {fileID: 598000446}
   m_Layer: 0
   m_Name: XR Origin
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3125,6 +3125,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnVoiceChatDisabled:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGrabButtonPressed:
     m_PersistentCalls:
       m_Calls: []
   enableSinglePlayerMode: 1
@@ -7761,6 +7764,7 @@ MonoBehaviour:
   oxygenLevelIndicator: {fileID: 446030844}
   radioBatteryIndicator: {fileID: 1451113692}
   yButtonIndicator: {fileID: 603008058}
+  currentScenario: 0
 --- !u!82 &2032491699
 AudioSource:
   m_ObjectHideFlags: 0
