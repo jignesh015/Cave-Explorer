@@ -38,6 +38,12 @@ namespace CaveExplorer
         [SerializeField] private float maxRadioBatteryTimer;
         [SerializeField] private float currentRadioBatteryTimer;
 
+        [Header("GAME UI")]
+        [SerializeField] private GameObject gameMenuUI;
+        [SerializeField] private GameObject ranOutOfOxygenUI;
+        [SerializeField] private GameObject ranOutOfBatteryUI;
+        [SerializeField] private GameObject gameCompleteUI;
+
         [Header("SFX")]
         [SerializeField] private AudioClip footstepTeleportSFX;
 
@@ -46,6 +52,9 @@ namespace CaveExplorer
 
         private bool isInGame;
         private AudioSource playerAudioSource;
+
+        private bool lastYButtonState = false;
+        private int yButtonPressCount = 1;
 
         // Start is called before the first frame update
         void Start()
@@ -60,11 +69,11 @@ namespace CaveExplorer
         // Update is called once per frame
         void Update()
         {
-            //Enable/Disable voice chat based on user input 
             if (isInGame && InputDevices.GetDeviceAtXRNode(XRNode.LeftHand) != null)
             {
-                bool triggerValue;
-                if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out triggerValue) && triggerValue)
+                //Enable/Disable voice chat based on user input 
+                bool leftTriggerValue;
+                if (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.triggerButton, out leftTriggerValue) && leftTriggerValue)
                 {
                     EnableVoiceChat();
                 }
@@ -85,6 +94,22 @@ namespace CaveExplorer
                 {
                     speakerAmp = 0;
                 }
+
+                //Toggle Game Menu based on user input
+                bool isYPressed, tempState = false;
+                tempState = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).TryGetFeatureValue(CommonUsages.secondaryButton, out isYPressed)
+                    && isYPressed || tempState;
+
+                if (tempState != lastYButtonState) // Button state changed since last frame
+                {
+                    Debug.LogFormat("<color=white>Y IS PRESSED</color>");
+                    lastYButtonState = tempState;
+                    if (yButtonPressCount % 2 == 0)
+                    {
+                        ToggleGameUI(gameMenuUI.activeSelf ? -1 : 0);
+                    }
+                    yButtonPressCount++;
+                }
             }
 
             //Start decreasing oxygen level when player are in game
@@ -97,7 +122,8 @@ namespace CaveExplorer
                     isInGame= false;
                     DisplayCurrentOxygenTimer(0);
 
-                    //TODO: GAME OVER LOGIC
+                    //Game Over : Ran out of Oxygen
+                    OnGameOver(0);
                 }
 
             }
@@ -112,7 +138,8 @@ namespace CaveExplorer
                     isInGame = false;
                     DisableVoiceChat();
 
-                    //TODO: GAME OVER LOGIC
+                    //Game Over : Ran out of Battery
+                    OnGameOver(1);
                 }
             }
         }
@@ -166,6 +193,8 @@ namespace CaveExplorer
             DisableVoiceChat();
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
+            ToggleWalkieTalkie(true);
+            TogglePlayerHandCanvas(true);
             ToggleXRDirectInteractor(true);
 
             //Suspend animations for left hand
@@ -177,6 +206,9 @@ namespace CaveExplorer
         {
             isInGame = false;
             recorder.TransmitEnabled = false;
+
+            currentOxygenTimer = maxOxygenTimer;
+            currentRadioBatteryTimer = maxRadioBatteryTimer;
 
             EnableVoiceChat();
             SetReticleScale(1);
@@ -284,12 +316,92 @@ namespace CaveExplorer
             PlaySFX(footstepTeleportSFX, 0.75f);
         }
 
+        /// <summary>
+        /// Plays the given audio clip
+        /// </summary>
+        /// <param name="_clip"></param>
+        /// <param name="_volume"></param>
         public void PlaySFX(AudioClip _clip, float _volume = 1)
         {
             playerAudioSource.Stop();
             playerAudioSource.clip = _clip;
             playerAudioSource.volume = _volume;
             playerAudioSource.Play();
+        }
+
+        /// <summary>
+        /// Is called when game is over due to running out of resources
+        /// | 0 = Oxygen Over | 1 = Battery Over
+        /// </summary>
+        /// <param name="_reason"></param>
+        public void OnGameOver(int _reason)
+        {
+            switch(_reason)
+            {
+                case 0:
+                    //Raise photon event for oxygen over
+                    GameManager.Instance.RaiseCustomEvent(StaticData.OutOfOxygenEventCode, null);
+                    break;
+                case 1:
+                    //Raise photon event for battery over
+                    GameManager.Instance.RaiseCustomEvent(StaticData.OutOfBatteryEventCode, null);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Toggles Game UI on/off
+        /// | -1 = All off | 0 = Game Menu | 1 = Oxygen Over 
+        /// | 2 = Battery Over | 3 = Game Complete
+        /// </summary>
+        /// <param name="_index"></param>
+        public void ToggleGameUI(int _index = -1)
+        {
+            gameMenuUI.SetActive(false);
+            ranOutOfOxygenUI.SetActive(false);
+            ranOutOfBatteryUI.SetActive(false);
+            gameCompleteUI.SetActive(false);
+
+            SetReticleScale(_index == -1 ? 0 : 1);
+
+            switch(_index)
+            {
+                case -1:
+                    break;
+                case 0:
+                    gameMenuUI.SetActive(true);
+                    GameManager.Instance.OnGameMenuOpened?.Invoke();
+                    break;
+                case 1:
+                    ranOutOfOxygenUI.SetActive(true);
+                    GameManager.Instance.envController.HideCurrentEnvironment();
+                    break;
+                case 2:
+                    ranOutOfBatteryUI.SetActive(true);
+                    GameManager.Instance.envController.HideCurrentEnvironment();
+                    break;
+                case 3:
+                    gameCompleteUI.SetActive(true);
+                    GameManager.Instance.envController.HideCurrentEnvironment();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Is called when user presses Exit to Lobby button in game ui
+        /// </summary>
+        public void OnExitToLobbyPressed()
+        {
+            //Close game ui
+            ToggleGameUI();
+
+            //Fade to black
+            GameManager.Instance.FadeToBlack();
+
+            //Raise the Photon Event for Exiting to lobby
+            GameManager.Instance.RaiseCustomEvent(StaticData.ExitToLobbyEventCode, null);
         }
     }
 }

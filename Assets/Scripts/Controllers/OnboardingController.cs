@@ -15,6 +15,7 @@ namespace CaveExplorer
         LeftTriggerToCommunicate,
         BeMindfulOfOxygenLevel,
         CooperateWithEachOther,
+        ToggleGameMenu,
         AllTheBest
     }
 
@@ -31,6 +32,7 @@ namespace CaveExplorer
         [SerializeField] private AudioClip leftTriggerToCommunicate;
         [SerializeField] private AudioClip beMindfulOfOxygenLevel;
         [SerializeField] private AudioClip cooperateWithEachOther;
+        [SerializeField] private AudioClip toggleGameMenu;
         [SerializeField] private AudioClip allTheBest;
 
         [Header("TEXT OVERLAYS")]
@@ -40,6 +42,7 @@ namespace CaveExplorer
         [SerializeField] private GameObject pressLeftTriggerToCommunicateIndicator;
         [SerializeField] private GameObject oxygenLevelIndicator;
         [SerializeField] private GameObject radioBatteryIndicator;
+        [SerializeField] private GameObject yButtonIndicator;
 
         private OnboardingScenario currentScenario;
 
@@ -58,6 +61,7 @@ namespace CaveExplorer
             //Add listeners
             gameManager.OnPlayerTeleport.AddListener(OnPlayerTeleport);
             gameManager.OnVoiceChatEnabled.AddListener(OnVoiceChatEnabled);
+            gameManager.OnGameMenuOpened.AddListener(OnGameMenuOpened);
 
             StartOnboarding();
         }
@@ -81,8 +85,6 @@ namespace CaveExplorer
 
             //Start Enter the lobby scenario
             PlayOnboardingScenrio(OnboardingScenario.EnterLobby);
-            
-            //Show Enter Lobby UI
         }
 
         // Update is called once per frame
@@ -126,8 +128,22 @@ namespace CaveExplorer
 
             yield return new WaitForSeconds(cooperateWithEachOther.length + 1f);
 
-            PlayOnboardingScenrio(OnboardingScenario.AllTheBest);
+            PlayOnboardingScenrio(OnboardingScenario.ToggleGameMenu);
+        }
 
+        private void OnGameMenuOpened()
+        {
+            //If player opened game menu, play the next scenario
+            if (currentScenario == OnboardingScenario.ToggleGameMenu)
+                StartCoroutine(OnGameMenuOpenedAsync());
+        }
+
+        private IEnumerator OnGameMenuOpenedAsync()
+        {
+            yield return new WaitForSeconds(3f);
+
+            if (currentScenario == OnboardingScenario.ToggleGameMenu)
+                PlayOnboardingScenrio(OnboardingScenario.AllTheBest);
         }
 
         public void PlayOnboardingScenrio(OnboardingScenario _scenario)
@@ -157,6 +173,8 @@ namespace CaveExplorer
                     break;
                 case OnboardingScenario.RightTriggerToTeleport:
                     PlayOnboardingAudio(rightTriggerToTeleport);
+                    playerController.ToggleWalkieTalkie(false);
+                    playerController.TogglePlayerHandCanvas(false);
                     playerController.ToggleControllers(false, true);
                     pressRightTriggerToTeleportIndicator.SetActive(true);
                     break;
@@ -175,8 +193,18 @@ namespace CaveExplorer
                 case OnboardingScenario.CooperateWithEachOther:
                     PlayOnboardingAudio(cooperateWithEachOther); 
                     break;
+                case OnboardingScenario.ToggleGameMenu:
+                    PlayOnboardingAudio(toggleGameMenu);
+                    yButtonIndicator.SetActive(true);
+                    playerController.ToggleControllers(true, false);
+                    playerController.TogglePlayerHandCanvas(false);
+                    playerController.ToggleWalkieTalkie(false);
+                    break;
                 case OnboardingScenario.AllTheBest:
                     PlayOnboardingAudio(allTheBest);
+                    playerController.TogglePlayerHandCanvas(true);
+                    playerController.ToggleWalkieTalkie(true);
+                    gameManager.hasCompletedOnboarding = true;
                     break;
                 default:
                     break;
@@ -204,6 +232,7 @@ namespace CaveExplorer
             pressLeftTriggerToCommunicateIndicator.SetActive(false);
             oxygenLevelIndicator.SetActive(false);
             radioBatteryIndicator.SetActive(false);
+            yButtonIndicator.SetActive(false);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace CaveExplorer
         /// <param name="_delay"></param>
         public void UnloadEnvironment(Environment _env, float _delay = 0)
         {
-            GameObject _envObj = GameObject.Find(_env.name);
+            GameObject _envObj = transform.Find(_env.name).gameObject;
             if(_envObj != null )
             {
                 Debug.LogFormat("<color=red>Unloading {0}</color>", _envObj.name);
@@ -97,6 +97,15 @@ namespace CaveExplorer
             if(currentlyLoadedEnvironment != null)
             {
                 UnloadEnvironment(currentlyLoadedEnvironment);
+            }
+        }
+
+        public void HideCurrentEnvironment()
+        {
+            if (currentlyLoadedEnvironment != null)
+            {
+                GameObject _envObj = transform.Find(currentlyLoadedEnvironment.name).gameObject;
+                _envObj.SetActive(false);
             }
         }
     }

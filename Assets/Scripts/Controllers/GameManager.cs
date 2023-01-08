@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
@@ -48,6 +49,7 @@ namespace CaveExplorer
 
         [Header("UI EVENTS")]
         public UnityEvent OnLobbyStartPressed;
+        public UnityEvent OnGameMenuOpened;
 
         [Header("GAME EVENTS")]
         public UnityEvent OnPlayerTeleport;
@@ -143,8 +145,18 @@ namespace CaveExplorer
         /// </summary>
         private void OnLobbyEnvLoaded()
         {
+            //Set player Position
+            playerController.SetPlayerPos(isPlayer1 ?
+                player1SpawnPoint.position : player2SpawnPoint.position);
+
+            //Set player Rotation
+            playerController.SetPlayerRot(envController.lobbyEnv.playerSpawnRot);
+
             //Set player variables
             playerController.SetPlayerVariablesForLobby();
+
+            //Reset cave environment level
+            envController.caveLevel = -1;
 
             //Fade to normal
             FadeToNormal();
@@ -155,7 +167,10 @@ namespace CaveExplorer
 
             //Call the remote start event if available
             if (remotePlayerPressedStart)
+            {
+                remotePlayerPressedStart = false;
                 FindObjectOfType<LobbyUIController>().StartGame(remotePlayerStatus);
+            }
         }
 
         /// <summary>
@@ -298,23 +313,37 @@ namespace CaveExplorer
         {
             byte eventCode = photonEvent.Code;
             if (eventCode == StaticData.StartGameEventCode)
+                StartGameEvent((object[])photonEvent.CustomData);
+            else if (eventCode == StaticData.OutOfOxygenEventCode)
+                playerController.ToggleGameUI(1);
+            else if (eventCode == StaticData.OutOfBatteryEventCode)
+                playerController.ToggleGameUI(2);
+            else if (eventCode == StaticData.GameCompleteEventCode)
+                playerController.ToggleGameUI(3);
+            else if (eventCode == StaticData.ExitToLobbyEventCode)
+                EnterLobby();
+        }
+
+        /// <summary>
+        /// Is called when start game event is received
+        /// </summary>
+        /// <param name="_content"></param>
+        private void StartGameEvent(object[] _content)
+        {
+            //Extract data from custom event object
+            bool _isPlayer1 = (bool)_content[0];
+            if (FindObjectOfType<LobbyUIController>() != null)
             {
-                //Extract data from custom event object
-                object[] _content = (object[])photonEvent.CustomData;
-                bool _isPlayer1 = (bool)_content[0];
-                if(FindObjectOfType<LobbyUIController>() != null)
+                //Lobby is already loaded, call the start method
+                FindObjectOfType<LobbyUIController>().StartGame(_isPlayer1);
+            }
+            else
+            {
+                //Cache the event for later
+                if (isPlayer1 != _isPlayer1)
                 {
-                    //Lobby is already loaded, call the start method
-                    FindObjectOfType<LobbyUIController>().StartGame(_isPlayer1);
-                }
-                else
-                {
-                    //Cache the event for later
-                    if (isPlayer1 != _isPlayer1)
-                    {
-                        remotePlayerPressedStart = true;
-                        remotePlayerStatus = _isPlayer1;
-                    }
+                    remotePlayerPressedStart = true;
+                    remotePlayerStatus = _isPlayer1;
                 }
             }
         }

@@ -405,7 +405,10 @@ namespace CaveExplorer
             yield return new WaitForSeconds(0.25f);
 
             //Fade to black
-            GameManager.Instance.FadeToBlack();
+            //GameManager.Instance.FadeToBlack();
+
+            //Raise event for Game Complete
+            GameManager.Instance.RaiseCustomEvent(StaticData.GameCompleteEventCode, null);
         }
 
         public void PlaySFX(AudioClip _clip)
