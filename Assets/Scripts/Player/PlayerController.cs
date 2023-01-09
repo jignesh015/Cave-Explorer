@@ -24,6 +24,7 @@ namespace CaveExplorer
         [SerializeField] private XRBaseController leftBaseController;
         [SerializeField] private XRBaseController rightBaseController;
         [SerializeField] private XRDirectInteractor rightDirectInteractor;
+        [SerializeField] private XRRayInteractor rightRayInteractor;
 
         [Header("RETICLE")]
         [SerializeField] private Transform reticle;
@@ -327,6 +328,11 @@ namespace CaveExplorer
         public void SetReticleScale(int _index)
         {
             reticle.localScale = reticleScale[_index];
+            if(rightRayInteractor!= null)
+            {
+                rightRayInteractor.lineType = _index == 0 ? XRRayInteractor.LineType.BezierCurve
+                    : XRRayInteractor.LineType.StraightLine;
+            }
         }
 
         /// <summary>

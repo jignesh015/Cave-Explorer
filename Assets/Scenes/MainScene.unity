@@ -2172,6 +2172,7 @@ MonoBehaviour:
   leftBaseController: {fileID: 1344209444}
   rightBaseController: {fileID: 91607654}
   rightDirectInteractor: {fileID: 823178421}
+  rightRayInteractor: {fileID: 91607655}
   reticle: {fileID: 1961928827}
   reticleScale:
   - {x: 0.4, y: 0.005, z: 0.4}

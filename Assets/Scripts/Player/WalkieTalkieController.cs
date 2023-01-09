@@ -38,7 +38,7 @@ namespace CaveExplorer
         {
             if (animator == null) animator = GetComponent<Animator>();
             animator.SetTrigger(_turnOn ? "LED_On" : "LED_Off");
-            PlaySFX(_turnOn ? radioStaticSFX : radioOffSFX);
+            //PlaySFX(_turnOn ? radioStaticSFX : radioOffSFX);
         }
 
         /// <summary>

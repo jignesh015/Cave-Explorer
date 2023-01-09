@@ -124,6 +124,9 @@ namespace CaveExplorer
                 //Play Button Pressed SFX
                 PlaySFX(buttonPressedSFX);
 
+                //Disable voice chat
+                gameManager.playerController.DisableVoiceChat();
+
                 //Invoke Lobby Confirmed delegate
                 gameManager.OnLobbyStartPressed?.Invoke();
             }

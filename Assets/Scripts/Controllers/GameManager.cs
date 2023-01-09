@@ -156,6 +156,9 @@ namespace CaveExplorer
             //Set player variables
             playerController.SetPlayerVariablesForLobby();
 
+            //Show network players
+            ToggleNetworkPlayers(true);
+
             //Reset cave environment level
             envController.caveLevel = -1;
 
@@ -163,8 +166,8 @@ namespace CaveExplorer
             FadeToNormal();
 
             //If player hasn't completed onboarding, play the scenario
-            if(!hasCompletedOnboarding)
-                onboardingController.PlayOnboardingScenrio(OnboardingScenario.WelcomeToLobby);
+            onboardingController.PlayOnboardingScenrio(hasCompletedOnboarding ? 
+                OnboardingScenario.None : OnboardingScenario.WelcomeToLobby);
 
             //Call the remote start event if available
             if (remotePlayerPressedStart)
@@ -260,7 +263,7 @@ namespace CaveExplorer
                 _np.transform.localScale = _state ? Vector3.one : Vector3.zero;
 
                 //Set distortion audio mixer
-                _np.SetAudioMixer(audioDistortionMixer);
+                _np.SetAudioMixer(_state ? null : audioDistortionMixer);
             }
         }
 
@@ -322,7 +325,10 @@ namespace CaveExplorer
             else if (eventCode == StaticData.GameCompleteEventCode)
                 playerController.ToggleGameUI(3);
             else if (eventCode == StaticData.ExitToLobbyEventCode)
+            {
+                playerController.ToggleGameUI();
                 Invoke(nameof(EnterLobby), 1f);
+            }
         }
 
         /// <summary>
