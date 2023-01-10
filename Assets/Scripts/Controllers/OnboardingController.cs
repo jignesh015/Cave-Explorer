@@ -190,7 +190,7 @@ namespace CaveExplorer
                 case OnboardingScenario.RightTriggerToTeleport:
                     PlayOnboardingAudio(rightTriggerToTeleport);
                     playerController.ToggleWalkieTalkie(false);
-                    playerController.TogglePlayerHandCanvas(false);
+                    playerController.ToggleSmartWatch(false);
                     playerController.ToggleControllers(false, true);
                     pressRightTriggerToTeleportIndicator.SetActive(true);
                     break;
@@ -203,7 +203,7 @@ namespace CaveExplorer
                     PlayOnboardingAudio(beMindfulOfOxygenLevel);
                     oxygenLevelIndicator.SetActive(true);
                     radioBatteryIndicator.SetActive(true);
-                    playerController.TogglePlayerHandCanvas(true);
+                    playerController.ToggleSmartWatch(true);
                     playerController.ToggleWalkieTalkie(true);
                     break;
                 case OnboardingScenario.CooperateWithEachOther:
@@ -213,12 +213,12 @@ namespace CaveExplorer
                     PlayOnboardingAudio(toggleGameMenu);
                     yButtonIndicator.SetActive(true);
                     playerController.ToggleControllers(true, false);
-                    playerController.TogglePlayerHandCanvas(false);
+                    playerController.ToggleSmartWatch(false);
                     playerController.ToggleWalkieTalkie(false);
                     break;
                 case OnboardingScenario.AllTheBest:
                     PlayOnboardingAudio(allTheBest);
-                    playerController.TogglePlayerHandCanvas(true);
+                    playerController.ToggleSmartWatch(true);
                     playerController.ToggleWalkieTalkie(true);
                     gameManager.hasCompletedOnboarding = true;
                     break;

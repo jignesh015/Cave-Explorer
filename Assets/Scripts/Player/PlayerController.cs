@@ -34,7 +34,7 @@ namespace CaveExplorer
         //Oxygen timer is the amount of time the player has left till their oxygen lasts
         [SerializeField] private float maxOxygenTimer;
         [SerializeField] private float currentOxygenTimer;
-        [SerializeField] private GameObject playerHandCanvas;
+        [SerializeField] private GameObject smartWatch;
         [SerializeField] private TextMeshProUGUI oxygenTimerDisplay;
 
         [Header("WALKIE TALKIE BATTERY LEVEL")]
@@ -223,7 +223,7 @@ namespace CaveExplorer
             SetReticleScale(0);
             ToggleHeadMountedLight(true);
             ToggleWalkieTalkie(true);
-            TogglePlayerHandCanvas(true);
+            ToggleSmartWatch(true);
             ToggleXRDirectInteractor(true);
 
             //Suspend animations for left hand
@@ -243,7 +243,7 @@ namespace CaveExplorer
             SetReticleScale(1);
             ToggleHeadMountedLight(false);
             ToggleWalkieTalkie(false);
-            TogglePlayerHandCanvas(false);
+            ToggleSmartWatch(false);
             ToggleXRDirectInteractor(true);
 
             leftHandPresence.suspendHandAnimation = false;
@@ -257,7 +257,7 @@ namespace CaveExplorer
             SetReticleScale(1);
             ToggleHeadMountedLight(false);
             ToggleWalkieTalkie(false);
-            TogglePlayerHandCanvas(false);
+            ToggleSmartWatch(false);
             ToggleXRDirectInteractor(true);
         }
 
@@ -280,12 +280,12 @@ namespace CaveExplorer
         }
 
         /// <summary>
-        /// Toggles the hand canvas on/off
+        /// Toggles the smart watch on/off
         /// </summary>
         /// <param name="state"></param>
-        public void TogglePlayerHandCanvas(bool state)
+        public void ToggleSmartWatch(bool state)
         {
-            playerHandCanvas.SetActive(state);
+            smartWatch.SetActive(state);
         }
 
         /// <summary>
