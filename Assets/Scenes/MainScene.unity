@@ -4004,7 +4004,7 @@ MonoBehaviour:
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     playerSpawnPos: {x: 0, y: 0, z: 0}
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.06
+    fogDensity: 0.02
     fogColor: {r: 0.29411766, g: 0.40784314, b: 0.5019608, a: 1}
     skybox: {fileID: 2100000, guid: 7e8e1fdc0ff565346a2b7022450dd3fe, type: 2}
   - name: Cave_Player1_2
@@ -4012,7 +4012,7 @@ MonoBehaviour:
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     playerSpawnPos: {x: 0, y: 0, z: 0}
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.06
+    fogDensity: 0.02
     fogColor: {r: 0.29411766, g: 0.40784314, b: 0.5019608, a: 1}
     skybox: {fileID: 2100000, guid: 7e8e1fdc0ff565346a2b7022450dd3fe, type: 2}
   player2CaveEnvList:
@@ -4021,7 +4021,7 @@ MonoBehaviour:
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     playerSpawnPos: {x: 0, y: 0, z: 0}
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.06
+    fogDensity: 0.03
     fogColor: {r: 0.29411766, g: 0.40784314, b: 0.5019608, a: 1}
     skybox: {fileID: 2100000, guid: 7e8e1fdc0ff565346a2b7022450dd3fe, type: 2}
   - name: Cave_Player2_2
@@ -4029,7 +4029,7 @@ MonoBehaviour:
     environmentSpawnRot: {x: 0, y: 0, z: 0, w: 0}
     playerSpawnPos: {x: 0, y: 0, z: 0}
     playerSpawnRot: {x: 0, y: 0, z: 0, w: 0}
-    fogDensity: 0.06
+    fogDensity: 0.03
     fogColor: {r: 0.29411766, g: 0.40784314, b: 0.5019608, a: 1}
     skybox: {fileID: 2100000, guid: 7e8e1fdc0ff565346a2b7022450dd3fe, type: 2}
 --- !u!4 &988204739
@@ -8131,8 +8131,8 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.3
+  m_Color: {r: 1, g: 0.9986968, b: 0.91886795, a: 1}
+  m_Intensity: 0.1
   m_Range: 8
   m_SpotAngle: 70
   m_InnerSpotAngle: 50
