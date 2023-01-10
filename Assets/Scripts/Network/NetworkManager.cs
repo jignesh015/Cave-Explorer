@@ -4,20 +4,40 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
+using UnityEngine.Events;
 
 namespace CaveExplorer
 {
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
+        public UnityAction networkErrorCallback;
+
+        [SerializeField] private float networkTimeoutLimit;
+        private float connectionTime;
+
         // Start is called before the first frame update
         void Start()
         {
             //ConnectToServer();
         }
 
+        private void Update()
+        {
+            if(connectionTime != 0)
+            {
+                Debug.LogFormat("<color=yellow>Connecting... {0}</color>", (Time.time - connectionTime).ToString("F2"));
+                if((Time.time - connectionTime) > networkTimeoutLimit)
+                {
+                    connectionTime = 0;
+                    networkErrorCallback?.Invoke();
+                }
+            }
+        }
+
         public void ConnectToServer()
         {
             PhotonNetwork.ConnectUsingSettings();
+            connectionTime = Time.time;
             Debug.Log("<color=yellow>Try connecting to a server...</color>");
         }
 
@@ -40,6 +60,9 @@ namespace CaveExplorer
         public override void OnJoinedRoom()
         {
             base.OnJoinedRoom();
+
+            //Reset connection time
+            connectionTime = 0;
 
             int playerCount = PlayerCount();
             PhotonNetwork.LocalPlayer.NickName = "Player " + playerCount;

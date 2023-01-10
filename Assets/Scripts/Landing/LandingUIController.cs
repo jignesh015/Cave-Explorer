@@ -8,6 +8,9 @@ namespace CaveExplorer
     {
         [SerializeField] private Animator gameTitleAnimator;
 
+        [SerializeField] private GameObject gameTitlePanel;
+        [SerializeField] private GameObject networkErrorPanel;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -35,9 +38,30 @@ namespace CaveExplorer
             //Change onboarding scenario to none
             GameManager.Instance.onboardingController.PlayOnboardingScenrio(OnboardingScenario.None);
 
-            //Try connecting to server
-            FindObjectOfType<NetworkManager>().ConnectToServer();
+            
+            NetworkManager netManager = FindObjectOfType<NetworkManager>();
+            if(netManager != null)
+            {
+                //Set network error callback
+                netManager.networkErrorCallback = OnNetworkError;
 
+                //Try connecting to server
+                netManager.ConnectToServer();
+            }
+            else
+            {
+                OnNetworkError();
+            }
+        }
+
+        public void OnNetworkError()
+        {
+            //Show network error panel
+            networkErrorPanel.SetActive(true);
+            gameTitlePanel.SetActive(false);
+
+            //Fade to normal
+            GameManager.Instance.FadeToNormal();
         }
     }
 }

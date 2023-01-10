@@ -1079,6 +1079,12 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!1 &107658055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1871053731708837282, guid: 5c265b864cbee854287e91ce8afc554a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1871053732531688398}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &131268524
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,6 +1408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c94c9bcfbc1169409d9a081b3886f40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkTimeoutLimit: 6
 --- !u!114 &208510735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7319,7 +7326,14 @@ PrefabInstance:
     - target: {fileID: 5991220331418867998, guid: 8d1bff3c2344a0b47bdd39701c403858,
         type: 3}
       propertyPath: m_text
-      value: Press Trigger to Teleport
+      value: 'Point towards ground and
+
+        Press Trigger to Teleport'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991220331418867999, guid: 8d1bff3c2344a0b47bdd39701c403858,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.3999939
       objectReference: {fileID: 0}
     - target: {fileID: 5991220331983071285, guid: 8d1bff3c2344a0b47bdd39701c403858,
         type: 3}
@@ -7470,6 +7484,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991220333362485061, guid: 8d1bff3c2344a0b47bdd39701c403858,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 256.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991220333362485061, guid: 8d1bff3c2344a0b47bdd39701c403858,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 187.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991220333362485061, guid: 8d1bff3c2344a0b47bdd39701c403858,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 93.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991220333362485061, guid: 8d1bff3c2344a0b47bdd39701c403858,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 22.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d1bff3c2344a0b47bdd39701c403858, type: 3}
@@ -8067,6 +8101,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2065554261}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2083954063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2083954063, guid: 5c265b864cbee854287e91ce8afc554a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1871053732531688398}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2106988286
 GameObject:
   m_ObjectHideFlags: 0
@@ -8201,6 +8241,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 988204739}
     m_Modifications:
+    - target: {fileID: 1871053731047841078, guid: 5c265b864cbee854287e91ce8afc554a,
+        type: 3}
+      propertyPath: gameTitlePanel
+      value: 
+      objectReference: {fileID: 107658055}
+    - target: {fileID: 1871053731047841078, guid: 5c265b864cbee854287e91ce8afc554a,
+        type: 3}
+      propertyPath: networkErrorPanel
+      value: 
+      objectReference: {fileID: 2083954063}
     - target: {fileID: 1871053731870345286, guid: 5c265b864cbee854287e91ce8afc554a,
         type: 3}
       propertyPath: m_Name
