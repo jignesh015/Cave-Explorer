@@ -2198,7 +2198,7 @@ MonoBehaviour:
   gameCompleteSFX: {fileID: 8300000, guid: a6ac65cc257091944b62f4d83943ff54, type: 3}
   gameOverSFX: {fileID: 8300000, guid: d1f2a076aee81a34b9d7db72a31f2385, type: 3}
   hapticIntensity: 0.7
-  hapticDuration: 1
+  hapticDuration: 3
   speakerAmp: 0
 --- !u!82 &598000446
 AudioSource:

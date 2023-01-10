@@ -90,6 +90,7 @@ namespace CaveExplorer
 
             //Add delegate
             OnJoinedRoom.AddListener(EnterLobby);
+            OnPlayerLeftRoom.AddListener(EnterLobby);
             OnLobbyStartPressed.AddListener(StartGame);
             OnConnectedToServer.AddListener(ConnectedToServer);
 
@@ -137,6 +138,9 @@ namespace CaveExplorer
         /// </summary>
         public void EnterLobby()
         {
+            //Change onboarding scenario to none
+            onboardingController.PlayOnboardingScenrio(OnboardingScenario.None);
+
             //Load Cave Environment
             envController.LoadEnvironment(envController.lobbyEnv, OnLobbyEnvLoaded, true);
         }

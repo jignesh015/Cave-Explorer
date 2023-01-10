@@ -298,8 +298,9 @@ namespace CaveExplorer
             leftHandPresence.showController = _leftState;
             rightHandPresence.showController = _rightState;
 
-            if (_leftState) TriggerHapticFeedback(0, hapticIntensity, hapticDuration);
-            if (_rightState) TriggerHapticFeedback(1, hapticIntensity, hapticDuration);
+            StopCoroutine(nameof(TriggerHapticFeedback));
+            if (_leftState) StartCoroutine(TriggerHapticFeedback(0, hapticIntensity, hapticDuration));
+            if (_rightState) StartCoroutine(TriggerHapticFeedback(1, hapticIntensity, hapticDuration));
         }
 
         /// <summary>
@@ -374,12 +375,16 @@ namespace CaveExplorer
         /// <param name="_handIndex"></param>
         /// <param name="_intensity"></param>
         /// <param name="_duration"></param>
-        public void TriggerHapticFeedback(int _handIndex, float _intensity, float _duration)
+        public IEnumerator TriggerHapticFeedback(int _handIndex, float _intensity, float _duration)
         {
-            if(_handIndex == 0)
-                leftBaseController.SendHapticImpulse(_intensity, _duration);
-            else
-                rightBaseController.SendHapticImpulse(_intensity, _duration);
+            XRBaseController _controller = _handIndex == 0 ? leftBaseController : rightBaseController;
+            int _pulseStrength = 4;
+            float _pulseDuration = _duration / _pulseStrength;
+            for(int i = 0; i < _pulseStrength; i++)
+            {
+                _controller.SendHapticImpulse(_intensity, _pulseDuration);
+                yield return new WaitForSeconds(_pulseDuration + 0.1f);
+            }
         }
 
         /// <summary>
