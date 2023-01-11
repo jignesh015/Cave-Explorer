@@ -195,6 +195,11 @@ namespace CaveExplorer
 
             completedHalfRotation= false;
             completedFullRotation= false;
+
+            if(currentWheel.GetComponent<SteeringWheel>() != null)
+            {
+                currentWheel.GetComponent<SteeringWheel>().OnWheelGrab();
+            }
         }
 
         /// <summary>
@@ -220,6 +225,10 @@ namespace CaveExplorer
             completedHalfRotation = false;
             completedFullRotation = false;
 
+            if (currentWheel.GetComponent<SteeringWheel>() != null)
+            {
+                currentWheel.GetComponent<SteeringWheel>().OnWheelRelease();
+            }
         }
 
         public void PlaySFX(AudioClip _clip)
