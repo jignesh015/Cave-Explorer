@@ -2179,11 +2179,11 @@ MonoBehaviour:
   reticleScale:
   - {x: 0.4, y: 0.005, z: 0.4}
   - {x: 0.05, y: 0.005, z: 0.05}
-  maxOxygenTimer: 600
+  maxOxygenTimer: 1200
   currentOxygenTimer: 0
   smartWatch: {fileID: 1134486626}
   oxygenTimerDisplay: {fileID: 1507544454}
-  maxRadioBatteryTimer: 300
+  maxRadioBatteryTimer: 600
   currentRadioBatteryTimer: 0
   gameMenuUI: {fileID: 1022482220}
   ranOutOfOxygenUI: {fileID: 426138295}
@@ -6395,7 +6395,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507544452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6405,7 +6405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -9.5}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1507544454

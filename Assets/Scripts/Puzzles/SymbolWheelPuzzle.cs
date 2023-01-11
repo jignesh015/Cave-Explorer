@@ -218,17 +218,17 @@ namespace CaveExplorer
 
             yield return new WaitForEndOfFrame();
 
+            if (currentWheel.GetComponent<SteeringWheel>() != null)
+            {
+                currentWheel.GetComponent<SteeringWheel>().OnWheelRelease();
+            }
+
             //currentWheel.GetComponent<Rigidbody>().isKinematic = false;
             currentWheel = null;
 
             //Reset bool
             completedHalfRotation = false;
             completedFullRotation = false;
-
-            if (currentWheel.GetComponent<SteeringWheel>() != null)
-            {
-                currentWheel.GetComponent<SteeringWheel>().OnWheelRelease();
-            }
         }
 
         public void PlaySFX(AudioClip _clip)
