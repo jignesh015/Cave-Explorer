@@ -8372,6 +8372,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Landing_Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 1871053731870345286, guid: 5c265b864cbee854287e91ce8afc554a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1871053731870345287, guid: 5c265b864cbee854287e91ce8afc554a,
         type: 3}
       propertyPath: m_RootOrder

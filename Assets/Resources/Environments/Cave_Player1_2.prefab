@@ -6376,6 +6376,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 230176865971814685}
     m_Modifications:
+    - target: {fileID: 2386401044012339825, guid: 59fde80ac6354b9409e658ad3f63b565,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.209
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386401045038683818, guid: 59fde80ac6354b9409e658ad3f63b565,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.589
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386401045750958560, guid: 59fde80ac6354b9409e658ad3f63b565,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.232
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386401045750958560, guid: 59fde80ac6354b9409e658ad3f63b565,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.071
+      objectReference: {fileID: 0}
     - target: {fileID: 5211010271705290064, guid: 59fde80ac6354b9409e658ad3f63b565,
         type: 3}
       propertyPath: m_RootOrder
@@ -6435,6 +6455,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Puzzle_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5282760183180490940, guid: 59fde80ac6354b9409e658ad3f63b565,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.153
+      objectReference: {fileID: 0}
+    - target: {fileID: 5282760183180490940, guid: 59fde80ac6354b9409e658ad3f63b565,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.738
       objectReference: {fileID: 0}
     - target: {fileID: 6400322237982889018, guid: 59fde80ac6354b9409e658ad3f63b565,
         type: 3}
